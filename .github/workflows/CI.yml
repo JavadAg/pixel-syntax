@@ -64,4 +64,4 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run E2E tests
-        run: npx percy exec -- npm run test:e2e
+        run: npm run test:e2e
