@@ -43,9 +43,6 @@ export default defineConfig({
     // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
     trace: process.env.CI ? "retain-on-failure" : undefined,
 
-    // Record videos when retrying the failed test.
-    video: process.env.CI ? "retain-on-failure" : undefined,
-
     // Ensure headless mode is enabled in CI
     headless: process.env.CI ? true : undefined // This will force headless mode in CI
   },
