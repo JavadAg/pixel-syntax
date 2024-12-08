@@ -77,6 +77,7 @@ const ContainerPadding = () => {
                   <CommandGroup>
                     {paddingList.map((padding) => (
                       <CommandItem
+                        data-testid={`paddingX-${padding.name}`}
                         key={padding.name}
                         value={padding.name}
                         onSelect={() => {
@@ -115,6 +116,7 @@ const ContainerPadding = () => {
                   <CommandGroup>
                     {paddingList.map((padding) => (
                       <CommandItem
+                        data-testid={`paddingY-${padding.name}`}
                         key={padding.name}
                         value={padding.name}
                         onSelect={() => {

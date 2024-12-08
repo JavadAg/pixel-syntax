@@ -17,7 +17,7 @@ export const metadata = {
   description: "Create beautiful image from your code"
 }
 
-export default async function RootLayout(props: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
+export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning lang="en" className={cn(sans.variable, "font-sans max-w-[2560px]")}>
       <body>
