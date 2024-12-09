@@ -1,10 +1,9 @@
 import type { Preset } from "@/types/presets.type"
 import AutoResizingInput from "@/components/ui/AutoResizingInput"
-import db from "@/libs/db"
+import { usePreset } from "@/hooks/use-preset"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-import { toast } from "sonner"
-import { z } from "zod"
+import { useState } from "react"
 import PresetControl from "./PresetControl/PresetControl"
 
 dayjs.extend(relativeTime)
@@ -13,17 +12,14 @@ type IProps = {
   preset: Preset
 }
 
-const nameSchema = z.string().min(1).max(20)
-
 const PresetInfo: React.FC<IProps> = ({ preset }) => {
-  function renamePreset(value: string) {
-    try {
-      nameSchema.parse(value)
-      db.presets.where("id").equals(preset.id).modify({ name: value })
-    } catch (error) {
-      console.error(error)
-      toast.error("Failed to rename preset")
-    }
+  const [name, setName] = useState(preset.name)
+
+  const { renamePreset } = usePreset()
+
+  function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setName(e.target.value)
+    renamePreset(preset.id, e.target.value)
   }
 
   return (
@@ -33,8 +29,8 @@ const PresetInfo: React.FC<IProps> = ({ preset }) => {
           data-testid="preset-name"
           maxLength={20}
           className="min-w-3 bg-transparent text-sm font-medium outline-none"
-          value={preset.name}
-          onChange={(e) => renamePreset(e.target.value)}
+          value={name}
+          onChange={(e) => handleNameChange(e)}
         />
         <span className="select-none text-xs text-muted-foreground">{dayjs(preset.updatedAt).fromNow()}</span>
       </div>
