@@ -19,7 +19,7 @@ export const metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning lang="en" className={cn(sans.variable, "font-sans max-w-[2560px]")}>
+    <html suppressHydrationWarning lang="en" className={cn(sans.variable, "font-sans")}>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <SidebarProvider>
