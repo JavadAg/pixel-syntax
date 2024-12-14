@@ -1,23 +1,27 @@
+import type { LanguageName } from "@uiw/codemirror-extensions-langs"
 import Button from "@/components/ui/Button"
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/Command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
-import languageConfigs, { type LanguageConfig } from "@/data/language-configs"
+import { languageNames } from "@/data/language-configs"
 import useStore from "@/store/store"
-import { cn } from "@/utils/helpers"
+import { cn, resolveLanguage } from "@/utils/helpers"
 import { Check, ChevronDown } from "lucide-react"
 import { useState } from "react"
 import SidebarItemWrapper from "../SidebarItemWrapper/SidebarItemWrapper"
 
 const CodeLanguage = () => {
   const [open, setOpen] = useState(false)
-  const setTabs = useStore((state) => state.setTabs)
-  const activeTab = useStore((state) => state.getActiveTab)
 
-  function handleLanguage(language: LanguageConfig) {
-    const newTab = { ...activeTab(), tabLanguage: language }
-    setTabs(activeTab().id, newTab)
+  const activeTabId = useStore((state) => state.activeTabId)
+  const getTab = useStore((state) => state.getTab)
+  const updateTab = useStore((state) => state.updateTab)
+
+  function handleLanguage(id: LanguageName) {
+    updateTab(activeTabId, { languageId: id })
     setOpen(false)
   }
+
+  const language = resolveLanguage(getTab().languageId)
 
   return (
     <SidebarItemWrapper>
@@ -31,7 +35,7 @@ const CodeLanguage = () => {
             aria-expanded={open}
             className="max-h-8 justify-between"
           >
-            {activeTab()?.tabLanguage?.label || "Select language..."}
+            {language.name || "Select language..."}
             <ChevronDown className="ml-auto mr-0 size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
           </Button>
         </PopoverTrigger>
@@ -40,21 +44,16 @@ const CodeLanguage = () => {
             <CommandInput placeholder="Search language..." />
             <CommandList>
               <CommandGroup>
-                {languageConfigs.map((lang) => (
+                {languageNames.map((lang) => (
                   <CommandItem
-                    key={lang.label}
-                    value={lang.label}
+                    key={lang.id}
+                    value={lang.id}
                     onSelect={() => {
-                      handleLanguage(lang)
+                      handleLanguage(lang.id)
                     }}
                   >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        activeTab()?.tabLanguage?.label === lang.label ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                    {lang.label}
+                    <Check className={cn("mr-2 h-4 w-4", language?.name === lang.name ? "opacity-100" : "opacity-0")} />
+                    {lang.name}
                   </CommandItem>
                 ))}
               </CommandGroup>

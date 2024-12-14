@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
-import { type Shadow, shadowList } from "@/data/shadow-presets"
+import { type Shadow, shadows } from "@/data/shadow-presets"
 import useStore from "@/store/store"
 import { cn } from "@/utils/helpers"
 import { shadowSchema } from "@/validations/editor-config.validation"
@@ -55,7 +55,7 @@ const EditorShadow = () => {
             aria-expanded={open}
             className="max-h-8 justify-between"
           >
-            {shadowList.find((shadow) => shadow.name === selectedShadow.name)?.name || "Custom"}
+            {shadows.find((shadow) => shadow.name === selectedShadow.name)?.name || "Custom"}
             <ChevronDown className="ml-auto mr-0 size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
           </Button>
         </PopoverTrigger>
@@ -71,7 +71,7 @@ const EditorShadow = () => {
             <CommandList>
               <CommandEmpty>No framework found.</CommandEmpty>
               <CommandGroup>
-                {shadowList.map((shadow) => (
+                {shadows.map((shadow) => (
                   <CommandItem
                     key={shadow.name}
                     value={shadow.name}

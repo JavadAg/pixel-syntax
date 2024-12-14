@@ -1,11 +1,9 @@
-// Solid Colors
-
-export type ColorPresets = {
+export type ColorPreset = {
   type: "solid" | "gradient"
   colors: string[]
 }
 
-export const solidColors: ColorPresets = {
+export const solidColors: ColorPreset = {
   type: "solid" as const,
   colors: [
     "rgba(0, 0, 0, 1)",
@@ -29,7 +27,7 @@ export const solidColors: ColorPresets = {
   ]
 }
 
-export const gradientColors: ColorPresets = {
+export const gradientColors: ColorPreset = {
   type: "gradient" as const,
   colors: [
     "linear-gradient(135deg, rgba(217, 237, 244, 1) 0%, rgba(179, 205, 229, 1) 100%)",

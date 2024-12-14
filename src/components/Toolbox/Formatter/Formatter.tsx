@@ -1,25 +1,25 @@
 import Button from "@/components/ui/Button"
 import useStore from "@/store/store"
-import { awaitPlugins } from "@/utils/helpers"
+import { awaitPlugins, resolveLanguage } from "@/utils/helpers"
 import { LetterText } from "lucide-react"
 import prettier from "prettier"
 import { toast } from "sonner"
 
 const Formatter = () => {
-  const activeTab = useStore((state) => state.getActiveTab)
-  const content = useStore((state) => state.content)
-
-  const setContent = useStore((state) => state.setContent)
+  const updateTab = useStore((state) => state.updateTab)
+  const getTab = useStore((state) => state.getTab)
 
   const formatCode = async () => {
     try {
-      const prettierBySelectedLanguage = activeTab().tabLanguage.prettier
-      const formatted = await prettier.format(content, {
+      const prettierBySelectedLanguage = resolveLanguage(getTab().languageId).prettier
+
+      const plugins = await awaitPlugins(prettierBySelectedLanguage?.plugin)
+      const formatted = await prettier.format(getTab().content, {
         parser: prettierBySelectedLanguage?.parser,
-        plugins: await awaitPlugins(prettierBySelectedLanguage?.plugin)
+        plugins
       })
 
-      setContent(formatted)
+      updateTab(getTab().id, { content: formatted })
       toast.success("Code formatted successfully")
     } catch (error) {
       console.error(error)

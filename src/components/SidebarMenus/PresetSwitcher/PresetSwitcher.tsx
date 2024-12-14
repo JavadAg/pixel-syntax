@@ -1,29 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@/components/ui/Button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/Collapsible"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/Sidebar"
 import { usePreset } from "@/hooks/use-preset"
-import useStore from "@/store/store"
-import { generateConfig } from "@/utils/helpers"
 import { ChevronsUpDown, Palette } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import PresetCard from "./PresetCard/PresetCard"
 
 const PresetSwitcher = () => {
   const [opened, setOpened] = useState(false)
+
   const { open } = useSidebar()
-
-  const { activePreset, activePresetId, presets, addPreset, changePreset } = usePreset()
-
-  const editorConfig = useStore((state) => state.editorConfig)
-  const setConfig = useStore((state) => state.setConfig)
-
-  useEffect(() => {
-    if (activePresetId?.value && activePreset) {
-      const presetConfig = generateConfig(activePreset)
-      setConfig({ ...editorConfig, ...presetConfig })
-    }
-  }, [activePresetId?.value, activePreset])
+  const { presets, addPreset, changePreset, activePreset } = usePreset()
 
   return (
     <SidebarMenu>
@@ -46,9 +33,6 @@ const PresetSwitcher = () => {
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
                 <span className="font-semibold">Presets</span>
-                <span data-testid="active-preset-name" className="text-xs text-muted-foreground empty:hidden">
-                  {activePreset?.name}
-                </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -65,7 +49,7 @@ const PresetSwitcher = () => {
                 presets?.map((preset) => (
                   <PresetCard
                     key={preset.id}
-                    isActive={activePresetId?.value && preset.id === activePresetId.value}
+                    isActive={preset.id === activePreset?.id}
                     preset={preset}
                     onClick={() => {
                       changePreset(preset.id)

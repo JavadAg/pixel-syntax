@@ -3,7 +3,7 @@ export type Shadow = {
   value: string
 }
 
-export const shadowList: Shadow[] = [
+export const shadows: Shadow[] = [
   {
     name: "None",
     value: "None"

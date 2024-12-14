@@ -3,7 +3,7 @@ export type Border = {
   value: string
 }
 
-export const borderList: Border[] = [
+export const borders: Border[] = [
   {
     name: "None",
     value: "none"

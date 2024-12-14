@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button"
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
-import { type Padding, paddingList } from "@/data/padding-presets"
+import { type Padding, paddings } from "@/data/padding-presets"
 import useStore from "@/store/store"
 import { cn } from "@/utils/helpers"
 import { paddingSchema } from "@/validations/editor-config.validation"
@@ -75,7 +75,7 @@ const ContainerPadding = () => {
                 />
                 <CommandList>
                   <CommandGroup>
-                    {paddingList.map((padding) => (
+                    {paddings.map((padding) => (
                       <CommandItem
                         data-testid={`paddingX-${padding.name}`}
                         key={padding.name}
@@ -114,7 +114,7 @@ const ContainerPadding = () => {
                 />
                 <CommandList>
                   <CommandGroup>
-                    {paddingList.map((padding) => (
+                    {paddings.map((padding) => (
                       <CommandItem
                         data-testid={`paddingY-${padding.name}`}
                         key={padding.name}

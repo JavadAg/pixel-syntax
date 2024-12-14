@@ -1,5 +1,5 @@
+/* eslint-disable playwright/no-conditional-in-test */
 import { expect, type Locator, type Page, test } from "@playwright/test"
-import { afterEach } from "vitest"
 
 let page: Page
 
@@ -78,13 +78,24 @@ test.describe("Dark Mode", () => {
 
 test.describe("Editor", () => {
   let editor: Locator
-  let tab: Locator
   let tabNameInput: Locator
+  let tabs: Locator
+  let deleteTabButton: Locator
+  let editorTabIcon: Locator
+  let addTabButton: Locator
 
-  test("should be able to type in the editor", async () => {
+  test.beforeEach(async () => {
     editor = page.getByTestId("editor")
+    tabNameInput = page.locator('[data-testid="editor-tab-name"]')
+    tabs = page.locator('[data-testid="editor-tab"]')
+    deleteTabButton = page.locator('[data-testid="editor-tab-delete"]')
+    editorTabIcon = tabs.locator('[data-testid="editor-tab-icon"]')
+    addTabButton = page.locator("[data-testid='add-new-tab-button']")
 
     await editor.waitFor({ state: "visible" })
+  })
+
+  test("should be able to type in the editor", async () => {
     await editor.click()
 
     await page.keyboard.press("Control+A")
@@ -97,9 +108,6 @@ test.describe("Editor", () => {
   })
 
   test("should rename the tab", async () => {
-    tab = page.getByTestId("editor-tab")
-    tabNameInput = tab.getByTestId("editor-tab-name")
-
     await tabNameInput.click()
     await tabNameInput.fill("New Tab Name")
     await tabNameInput.blur()
@@ -108,12 +116,36 @@ test.describe("Editor", () => {
   })
 
   test("should change the tab icon", async () => {
-    await page.getByTestId("editor-tab-icon").click()
+    await editorTabIcon.click()
     const iconList = page.getByTestId("editor-tab-icon-dropdown")
     await iconList.getByRole("menuitem", { name: ".jsx", exact: true }).click()
     const selectedIcon = await page.getByTestId("editor-tab-icon").getByRole("img").getAttribute("alt")
 
     expect(selectedIcon).toContain(".jsx")
+  })
+
+  test("should add a new tab and switch to it", async () => {
+    await expect(tabs).toHaveAttribute("data-active", "true")
+
+    await addTabButton.click()
+
+    await expect(tabs.nth(0)).toHaveAttribute("data-active", "false")
+    await expect(tabs.nth(1)).toHaveAttribute("data-active", "true")
+  })
+
+  test("should delete a tab", async () => {
+    const tabElements = await tabs.elementHandles()
+    if (tabElements.length === 1) {
+      await addTabButton.click()
+    }
+
+    expect(tabElements.length).toBe(2)
+
+    await deleteTabButton.click()
+
+    const tabElementsAfterDelete = await tabs.elementHandles()
+
+    expect(tabElementsAfterDelete.length).toBe(1)
   })
 })
 

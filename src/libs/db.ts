@@ -6,7 +6,7 @@ const db = new Dexie("syntax-presets-db") as Dexie & {
 }
 
 db.version(2).stores({
-  presets: "++id, name, updatedAt, createdAt, preview",
+  presets: "++id, name, updatedAt, createdAt, configs",
   appState: "&key"
 })
 

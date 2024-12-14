@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
-import { type Border, borderList } from "@/data/border-presets"
+import { type Border, borders } from "@/data/border-presets"
 import useStore from "@/store/store"
 import { cn } from "@/utils/helpers"
 import { borderSchema } from "@/validations/editor-config.validation"
@@ -55,7 +55,7 @@ const EditorBorder = () => {
             aria-expanded={open}
             className="max-h-8 justify-between"
           >
-            {borderList.find((border) => border.name === selectedBorder.name)?.name || "Custom"}
+            {borders.find((border) => border.name === selectedBorder.name)?.name || "Custom"}
             <ChevronDown className="ml-auto mr-0 size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
           </Button>
         </PopoverTrigger>
@@ -71,7 +71,7 @@ const EditorBorder = () => {
             <CommandList>
               <CommandEmpty>No framework found.</CommandEmpty>
               <CommandGroup>
-                {borderList.map((border) => (
+                {borders.map((border) => (
                   <CommandItem
                     key={border.name}
                     value={border.name}

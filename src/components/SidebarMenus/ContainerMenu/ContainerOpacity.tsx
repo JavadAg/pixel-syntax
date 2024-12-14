@@ -12,9 +12,8 @@ const ContainerOpacity = () => {
       <Slider
         data-testid="container-opacity-slider"
         value={[opacity]}
-        max={1}
-        min={0}
-        step={0.01}
+        max={100}
+        min={-1}
         onValueChange={(val) => val[0] && setOpacity(val[0])}
       />
     </SidebarItemWrapper>

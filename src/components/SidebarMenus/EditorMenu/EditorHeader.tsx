@@ -1,24 +1,39 @@
-import type { TabConfig } from "@/types/editor-config.type"
+import type { TabConfig } from "@/types/editor.type"
 import EditorTab from "@/components/EditorHeaders/EditorTab/EditorTab"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/Accordion"
 import { Switch } from "@/components/ui/Switch"
-import { headersList } from "@/data/editor-headers"
+import { headers } from "@/data/editor-headers"
 import useStore from "@/store/store"
-import { cn } from "@/utils/helpers"
+import { cn, resolveTheme } from "@/utils/helpers"
 import SidebarItemWrapper from "../SidebarItemWrapper/SidebarItemWrapper"
 
 const EditorHeader = () => {
-  const { isHeader, headerType, theme, isTransparent } = useStore((state) => state.editorConfig)
-  const activeTab = useStore((state) => state.getActiveTab)
+  const { isHeader, headerId, isTransparent, themeId } = useStore((state) => state.editorConfig)
+  const getTab = useStore((state) => state.getTab)
 
   const setHeader = useStore((state) => state.setHeader)
-  const setHeaderType = useStore((state) => state.setHeaderType)
+  const setHeaderId = useStore((state) => state.setHeaderId)
 
   const tab: TabConfig = {
-    id: 1,
-    tabName: "Untitled",
-    tabLanguage: activeTab().tabLanguage,
-    tabExtension: activeTab().tabExtension
+    id: Date.now().toString(),
+    name: "Untitled",
+    content: "",
+    languageId: getTab().languageId,
+    extension: getTab().extension
+  }
+
+  const theme = resolveTheme(themeId, isTransparent)
+
+  const buttonStyle = () => {
+    const isLight = theme.options.theme === "light"
+
+    return {
+      backgroundColor: isTransparent
+        ? isLight
+          ? "rgba(255,255,255, 0.7)"
+          : "rgba(0,0,0, 0.7)"
+        : theme.options.settings.background
+    }
   }
 
   return (
@@ -34,24 +49,20 @@ const EditorHeader = () => {
               Header Type
             </AccordionTrigger>
             <AccordionContent data-testid="editor-header-type-content" className="grid gap-2 px-1">
-              {headersList.map((item) => (
+              {headers.map((item) => (
                 <button
                   type="button"
                   style={{
-                    backgroundColor: isTransparent
-                      ? theme.theme.theme === "light"
-                        ? "rgba(255,255,255, 0.7)"
-                        : "rgba(0,0,0, 0.7)"
-                      : theme.theme.settings.background
+                    ...buttonStyle()
                   }}
                   className={cn(
-                    headerType.name === item.name && "ring-2 ring-ring",
+                    headerId === item.id && "ring-2 ring-ring",
                     "w-full p-1 rounded-lg duration-200 text-white"
                   )}
-                  onClick={() => setHeaderType(item)}
+                  onClick={() => setHeaderId(item.id)}
                   key={item.name}
                 >
-                  {item.value(<EditorTab tab={tab} />)}
+                  {item.component(<EditorTab tab={tab} />)}
                 </button>
               ))}
             </AccordionContent>

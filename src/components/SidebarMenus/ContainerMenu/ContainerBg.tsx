@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem } from "@/components/ui/Accordion"
-import { type ColorPresets, gradientColors, solidColors } from "@/data/color-presets"
+import { type ColorPreset, gradientColors, solidColors } from "@/data/color-presets"
 import useStore from "@/store/store"
 import { useState } from "react"
 import ReactGPicker from "react-gcolor-picker"
@@ -7,7 +7,7 @@ import MenuAccordionTrigger from "../MenuAccordionTrigger/MenuAccordionTrigger"
 import SidebarItemWrapper from "../SidebarItemWrapper/SidebarItemWrapper"
 
 const ContainerBg = () => {
-  const [colorPresets, setColorPresets] = useState<ColorPresets>(gradientColors)
+  const [colorPresets, setColorPresets] = useState<ColorPreset>(gradientColors)
 
   const { background } = useStore((state) => state.editorConfig)
   const setBackground = useStore((state) => state.setBackground)

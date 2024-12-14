@@ -64,17 +64,6 @@ export const fonts: Font[] = [
     ]
   },
   {
-    id: "gintronic",
-    name: "Gintronic",
-    value: "Gintronic, monospace",
-    ligatures: false,
-    weights: [
-      { name: "Regular", value: 400 },
-      { name: "Medium", value: 500 },
-      { name: "Bold", value: 700 }
-    ]
-  },
-  {
     id: "hack",
     name: "Hack",
     value: "Hack, monospace",
@@ -149,3 +138,16 @@ export const fonts: Font[] = [
     ]
   }
 ]
+
+export const fontNames = fonts
+  .map((font) => {
+    return {
+      id: font.id,
+      name: font.name
+    }
+  })
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+export function getFont(id: string) {
+  return fonts.find((font) => font.id === id)!
+}

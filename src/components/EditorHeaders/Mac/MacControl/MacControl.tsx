@@ -7,7 +7,7 @@ type IProps = {
 
 const MacControl: React.FC<IProps> = ({ variant }) => {
   return (
-    <div data-testid="mac-control" className="flex items-center gap-2">
+    <div data-testid="mac-control" className="mr-3 flex items-center gap-2">
       <Circle
         size={16}
         className={cn(
@@ -28,7 +28,7 @@ const MacControl: React.FC<IProps> = ({ variant }) => {
         size={16}
         className={cn(
           variant === "outline" && "text-green-400",
-          variant === "colored" && "fill-green-400 text-green-400",
+          variant === "colored" && "fill-green-500 text-green-500",
           variant === "default" && "fill-gray-400 text-gray-400"
         )}
       />

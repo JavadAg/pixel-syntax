@@ -7,10 +7,6 @@ test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext()
   page = await context.newPage()
   await page.goto("http://localhost:3000")
-
-  await page.getByRole("button", { name: "Editor" }).click()
-  await page.getByRole("button", { name: "Code" }).click()
-  await page.getByRole("button", { name: "Font" }).click()
 })
 
 /**
@@ -22,13 +18,11 @@ test.beforeAll(async ({ browser }) => {
 test.describe("PresetSwitcher", () => {
   let presetSwitcherButton: Locator
   let presetList: Locator
-  let activePresetName: Locator
   let presetName: Locator
 
   test.beforeEach(async () => {
     presetSwitcherButton = page.getByTestId("preset-switcher-button")
     presetList = page.getByTestId("preset-switcher-list")
-    activePresetName = page.getByTestId("active-preset-name")
     presetName = page.getByTestId("preset-name")
 
     await presetSwitcherButton.click()
@@ -38,7 +32,6 @@ test.describe("PresetSwitcher", () => {
 
   test("should add, rename and delete a preset", async () => {
     const createPresetButton = page.getByRole("button", { name: "Create preset" })
-
     await createPresetButton.click()
     const addToast = page.locator("text=Preset added")
 
@@ -48,13 +41,11 @@ test.describe("PresetSwitcher", () => {
     await presetName.click()
     await presetName.fill("Renamed Preset")
 
-    await expect(activePresetName).toHaveText("Renamed Preset")
     await expect(presetList).toContainText("Renamed Preset")
 
     await createPresetButton.click()
 
     await expect(presetList).toContainText("New Preset")
-    await expect(activePresetName).toHaveText("New Preset")
 
     const presetCard = page.getByTestId("preset-card").first()
 
@@ -234,7 +225,7 @@ test.describe("ContainerOpacity Component", () => {
   test("should display slider with correct initial opacity", async () => {
     const initialOpacity = await sliderHandle.getAttribute("aria-valuenow")
 
-    expect(Number.parseFloat(initialOpacity!)).toBe(1)
+    expect(Number.parseFloat(initialOpacity!)).toBe(100)
   })
 
   test("should update opacity value when slider is moved", async () => {
@@ -243,8 +234,7 @@ test.describe("ContainerOpacity Component", () => {
 
     const updatedOpacity = await sliderHandle.getAttribute("aria-valuenow")
 
-    expect(Number.parseFloat(updatedOpacity!)).toBe(0.9)
-
+    expect(Number.parseFloat(updatedOpacity!)).toBe(90)
     await expect(containerWrapper).toHaveCSS("opacity", "0.9")
   })
 })

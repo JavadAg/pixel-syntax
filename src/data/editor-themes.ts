@@ -4,19 +4,14 @@ import { tags as t } from "@lezer/highlight"
 export type Theme = {
   id: string
   name: string
-  theme: CreateThemeOptions
-  preview?: string
-  background: string
-  variant: "light" | "dark"
+  options: CreateThemeOptions
 }
 
 export const themes: Theme[] = [
   {
     id: "dracula",
     name: "Dracula",
-    variant: "dark",
-    background: "#282A36",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#282A36",
@@ -30,17 +25,20 @@ export const themes: Theme[] = [
       },
       styles: [
         { tag: [t.comment], color: "#6272A4", fontStyle: "italic" },
-        { tag: [t.keyword, t.operator], color: "#FF79C6" },
-        { tag: [t.className, t.definition(t.typeName)], color: "#8BE9FD" },
-        { tag: [t.function(t.variableName)], color: "#50FA7B" },
-        { tag: [t.string, t.special(t.string)], color: "#F1FA8C" },
-        { tag: [t.number, t.bool, t.null], color: "#BD93F9" },
-        { tag: [t.variableName], color: "#F8F8F2" },
-        { tag: [t.propertyName], color: "#F8F8F2" },
-        { tag: [t.attributeName], color: "#50FA7B" },
-        { tag: [t.tagName], color: "#FF79C6" },
-        { tag: [t.heading], color: "#BD93F9", fontWeight: "bold" },
         { tag: [t.meta, t.annotation], color: "#F8F8F2" },
+        { tag: [t.keyword, t.operator], color: "#FF79C6" },
+        { tag: [t.className, t.typeName, t.definition(t.typeName)], color: "#8BE9FD" },
+        { tag: [t.function(t.variableName)], color: "#50FA7B" },
+        { tag: [t.definition(t.variableName)], color: "#BD93F9" },
+        { tag: [t.variableName], color: "#F8F8F2" },
+        { tag: [t.propertyName, t.function(t.propertyName)], color: "#F8F8F2" },
+        { tag: [t.attributeName], color: "#50FA7B" },
+        { tag: [t.string, t.special(t.string), t.special(t.brace)], color: "#F1FA8C" },
+        { tag: [t.number, t.bool, t.null], color: "#BD93F9" },
+        { tag: [t.tagName], color: "#FF79C6" },
+        { tag: [t.angleBracket, t.self], color: "#F8F8F2" },
+        { tag: [t.heading], color: "#BD93F9", fontWeight: "bold" },
+        { tag: [t.quote, t.list], color: "#6272A4", fontStyle: "italic" },
         { tag: [t.invalid], color: "#FF5555", textDecoration: "line-through" }
       ]
     }
@@ -48,46 +46,42 @@ export const themes: Theme[] = [
   {
     id: "ayu",
     name: "Ayu",
-    variant: "dark",
-    background: "linear-gradient(135deg, #0F1419, #1D252C)",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#0F1419",
-        foreground: "#B3B1AD",
+        foreground: "#D9D7CE",
         caret: "#FFCC66",
         selection: "#253340",
         selectionMatch: "#253340",
         lineHighlight: "#1D252C",
         gutterBackground: "#0F1419",
-        gutterForeground: "#3E4B59"
+        gutterForeground: "#5C6773"
       },
       styles: [
         { tag: [t.comment], color: "#5C6773", fontStyle: "italic" },
-        { tag: [t.keyword, t.operator, t.modifier], color: "#F07178" },
-        { tag: [t.className, t.definition(t.typeName)], color: "#FFCC66" },
-        { tag: [t.function(t.variableName)], color: "#E6B450" },
-        { tag: [t.string, t.special(t.string)], color: "#BAE67E" },
-        { tag: [t.number, t.bool, t.null], color: "#D4BFFF" },
-        { tag: [t.variableName], color: "#E7C547" },
-        { tag: [t.propertyName], color: "#FFD580" },
-        { tag: [t.attributeName], color: "#C2D94C" },
-        { tag: [t.tagName], color: "#39BAE6" },
-        { tag: [t.heading], color: "#FFCC66", fontWeight: "bold" },
-        { tag: [t.meta, t.annotation], color: "#B3B1AD" },
-        { tag: [t.invalid], color: "#FF3333", textDecoration: "line-through" },
-        { tag: [t.link], color: "#39BAE6", textDecoration: "underline" },
-        { tag: [t.emphasis], color: "#B3B1AD", fontStyle: "italic" },
-        { tag: [t.strong], color: "#B3B1AD", fontWeight: "bold" }
+        { tag: [t.meta, t.annotation], color: "#D9D7CE" },
+        { tag: [t.keyword, t.operator], color: "#F29718" },
+        { tag: [t.className, t.typeName, t.definition(t.typeName)], color: "#36A3D9" },
+        { tag: [t.function(t.variableName)], color: "#FFD580" },
+        { tag: [t.definition(t.variableName)], color: "#FFD580" },
+        { tag: [t.variableName], color: "#D9D7CE" },
+        { tag: [t.propertyName, t.function(t.propertyName)], color: "#D9D7CE" },
+        { tag: [t.attributeName], color: "#FFD580" },
+        { tag: [t.string, t.special(t.string), t.special(t.brace)], color: "#AAD94C" },
+        { tag: [t.number, t.bool, t.null], color: "#E06C75" },
+        { tag: [t.tagName], color: "#F29718" },
+        { tag: [t.angleBracket, t.self], color: "#D9D7CE" },
+        { tag: [t.heading], color: "#E06C75", fontWeight: "bold" },
+        { tag: [t.quote, t.list], color: "#5C6773", fontStyle: "italic" },
+        { tag: [t.invalid], color: "#FF5555", textDecoration: "line-through" }
       ]
     }
   },
   {
     id: "github-light",
     name: "GitHub Light",
-    variant: "light",
-    background: "#ffffff",
-    theme: {
+    options: {
       theme: "light",
       settings: {
         background: "#ffffff",
@@ -122,9 +116,7 @@ export const themes: Theme[] = [
   {
     id: "github-dark",
     name: "GitHub Dark",
-    variant: "dark",
-    background: "#0d1117",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#0d1117",
@@ -157,45 +149,9 @@ export const themes: Theme[] = [
     }
   },
   {
-    id: "panda-syntax",
-    name: "Panda Syntax",
-    variant: "dark",
-    background: "#292A2B",
-    theme: {
-      theme: "dark",
-      settings: {
-        background: "#292A2B",
-        foreground: "#E6E6E6",
-        caret: "#FFB86C",
-        selection: "#3E3E3E",
-        selectionMatch: "#3E3E3E",
-        lineHighlight: "#3E3E3E",
-        gutterBackground: "#292A2B",
-        gutterForeground: "#616161"
-      },
-      styles: [
-        { tag: [t.comment], color: "#676B79", fontStyle: "italic" },
-        { tag: [t.keyword, t.operator], color: "#FF75B5" },
-        { tag: [t.className, t.definition(t.typeName)], color: "#FFD700" },
-        { tag: [t.function(t.variableName)], color: "#19F9D8" },
-        { tag: [t.string, t.special(t.string)], color: "#FFB86C" },
-        { tag: [t.number, t.bool, t.null], color: "#FF75B5" },
-        { tag: [t.variableName], color: "#E6E6E6" },
-        { tag: [t.propertyName], color: "#E6E6E6" },
-        { tag: [t.attributeName], color: "#FFD700" },
-        { tag: [t.tagName], color: "#FF75B5" },
-        { tag: [t.heading], color: "#FFD700", fontWeight: "bold" },
-        { tag: [t.meta, t.annotation], color: "#676B79" },
-        { tag: [t.invalid], color: "#FF5555", textDecoration: "line-through" }
-      ]
-    }
-  },
-  {
     id: "tokyo-night",
     name: "Tokyo Night",
-    variant: "dark",
-    background: "#1A1B26",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#1A1B26",
@@ -227,9 +183,7 @@ export const themes: Theme[] = [
   {
     id: "light-owl",
     name: "Light Owl",
-    variant: "light",
-    background: "#FDF6E3",
-    theme: {
+    options: {
       theme: "light",
       settings: {
         background: "#FDF6E3",
@@ -261,9 +215,7 @@ export const themes: Theme[] = [
   {
     id: "night-owl",
     name: "Night Owl",
-    variant: "dark",
-    background: "#011627",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#011627",
@@ -295,9 +247,7 @@ export const themes: Theme[] = [
   {
     id: "one-dark-pro",
     name: "One Dark Pro",
-    variant: "dark",
-    background: "#282C34",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#282C34",
@@ -305,33 +255,34 @@ export const themes: Theme[] = [
         caret: "#528BFF",
         selection: "#3E4451",
         selectionMatch: "#3E4451",
-        lineHighlight: "#2C313C",
+        lineHighlight: "#2C313A",
         gutterBackground: "#282C34",
-        gutterForeground: "#636D83"
+        gutterForeground: "#4B5263"
       },
       styles: [
         { tag: [t.comment], color: "#5C6370", fontStyle: "italic" },
+        { tag: [t.meta, t.annotation], color: "#ABB2BF" },
         { tag: [t.keyword, t.operator], color: "#C678DD" },
-        { tag: [t.className, t.definition(t.typeName)], color: "#E5C07B" },
+        { tag: [t.className, t.typeName, t.definition(t.typeName)], color: "#E5C07B" },
         { tag: [t.function(t.variableName)], color: "#61AFEF" },
-        { tag: [t.string, t.special(t.string)], color: "#98C379" },
-        { tag: [t.number, t.bool, t.null], color: "#D19A66" },
+        { tag: [t.definition(t.variableName)], color: "#d2b071" },
         { tag: [t.variableName], color: "#E06C75" },
-        { tag: [t.propertyName], color: "#ABB2BF" },
+        { tag: [t.propertyName, t.function(t.propertyName)], color: "#ABB2BF" },
         { tag: [t.attributeName], color: "#D19A66" },
+        { tag: [t.string, t.special(t.string), t.special(t.brace)], color: "#98C379" },
+        { tag: [t.number, t.bool, t.null], color: "#D19A66" },
         { tag: [t.tagName], color: "#E06C75" },
+        { tag: [t.angleBracket, t.self], color: "#ABB2BF" },
         { tag: [t.heading], color: "#61AFEF", fontWeight: "bold" },
-        { tag: [t.meta, t.annotation], color: "#5C6370" },
-        { tag: [t.invalid], color: "#BE5046", textDecoration: "line-through" }
+        { tag: [t.quote, t.list], color: "#5C6370", fontStyle: "italic" },
+        { tag: [t.invalid], color: "#F44747", textDecoration: "line-through" }
       ]
     }
   },
   {
     id: "monokai-pro",
     name: "Monokai Pro",
-    variant: "dark",
-    background: "#2D2A2E",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#2D2A2E",
@@ -363,9 +314,7 @@ export const themes: Theme[] = [
   {
     id: "synthwave-84",
     name: "SynthWave '84",
-    variant: "dark",
-    background: "#2A2139",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#2A2139",
@@ -397,9 +346,7 @@ export const themes: Theme[] = [
   {
     id: "solarized-light",
     name: "Solarized Light",
-    variant: "light",
-    background: "#FDF6E3",
-    theme: {
+    options: {
       theme: "light",
       settings: {
         background: "#FDF6E3",
@@ -431,9 +378,7 @@ export const themes: Theme[] = [
   {
     id: "material-darker",
     name: "Material Darker",
-    variant: "dark",
-    background: "#212121",
-    theme: {
+    options: {
       theme: "dark",
       settings: {
         background: "#212121",
@@ -465,9 +410,7 @@ export const themes: Theme[] = [
   {
     id: "material-light",
     name: "Material Light",
-    variant: "light",
-    background: "#FAFAFA",
-    theme: {
+    options: {
       theme: "light",
       settings: {
         background: "#FAFAFA",
@@ -497,3 +440,13 @@ export const themes: Theme[] = [
     }
   }
 ]
+
+export const themeNames = themes
+  .map((theme) => {
+    return { id: theme.id, name: theme.name }
+  })
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+export function getTheme(id: string) {
+  return themes.find((theme) => theme.id === id)!
+}

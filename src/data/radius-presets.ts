@@ -3,7 +3,7 @@ export type Radius = {
   value: number
 }
 
-export const radiusList: Radius[] = [
+export const radii: Radius[] = [
   {
     name: "None",
     value: 0

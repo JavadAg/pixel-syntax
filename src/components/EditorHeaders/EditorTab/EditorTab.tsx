@@ -1,11 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 
-import type { TabConfig } from "@/types/editor-config.type"
+import type { TabConfig } from "@/types/editor.type"
 import AutoResizingInput from "@/components/ui/AutoResizingInput"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown"
-import languageConfigs, { type LanguageConfig } from "@/data/language-configs"
+import { type Language, languages } from "@/data/language-configs"
 import useStore from "@/store/store"
-import { adjustBrightness, adjustOpacity } from "@/utils/helpers"
+import { adjustBrightness, adjustOpacity, cn, resolveTheme } from "@/utils/helpers"
+import { debounce } from "lodash-es"
+import { X } from "lucide-react"
+import { useCallback, useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -15,44 +19,71 @@ type IProps = {
 }
 
 const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
-  const { theme, activeTabId, isTransparent } = useStore((state) => state.editorConfig)
-  const setActiveTab = useStore((state) => state.setActiveTab)
-  const setTabs = useStore((state) => state.setTabs)
+  const [name, setName] = useState(tab.name)
 
-  function handleName(value: string) {
-    const isValid = z.string().safeParse(value).success
+  const { isTransparent, themeId } = useStore((state) => state.editorConfig)
 
-    if (isValid) {
-      const newTab = { ...tab, tabName: value }
-      setTabs(activeTabId, newTab)
-    } else {
-      toast.error("Tab name is invalid")
+  const tabs = useStore((state) => state.tabs)
+  const activeTabId = useStore((state) => state.activeTabId)
+  const changeTab = useStore((state) => state.changeTab)
+  const updateTab = useStore((state) => state.updateTab)
+  const removeTab = useStore((state) => state.removeTab)
+
+  const handleNameCallback = useCallback(
+    debounce((id: string, value: string) => updateTab(id, { name: value }), 1000),
+    []
+  )
+
+  function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    try {
+      const isValid = z.string().min(1).max(20).safeParse(e.target.value)
+      if (isValid.success) {
+        setName(e.target.value)
+        handleNameCallback(tab.id, e.target.value)
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error("Name must be between 1 and 20 characters")
     }
   }
 
-  function handleIcon(ext: LanguageConfig["fileExtensions"][number]) {
-    const newTab = { ...tab, tabExtension: ext }
-    setTabs(activeTabId, newTab)
+  function handleIcon(ext: Language["extensions"][number]) {
+    updateTab(tab.id, { extension: ext })
   }
 
-  const fileExtensions = languageConfigs.find((lang) => lang.label === tab.tabLanguage.label)?.fileExtensions
+  function handleDelete() {
+    removeTab(activeTabId)
+  }
+
+  const fileExtensions = languages.find((lang) => lang.id === tab.languageId)?.extensions
+
+  const isActive = tab.id === activeTabId
+  const theme = resolveTheme(themeId, isTransparent)
 
   return (
     <div
       data-testid="editor-tab"
-      onClick={() => setActiveTab(tab.id)}
-      className="relative flex items-center justify-center gap-2 rounded-lg px-4 py-1 shadow-md shadow-black/10"
+      data-active={isActive}
+      onClick={() => changeTab(tab.id)}
+      className={cn(
+        "relative flex items-center duration-200 justify-center gap-1.5 rounded-lg pl-4 pr-2 py-1",
+        isActive ? "shadow-md shadow-black/10" : ""
+      )}
       style={{
         backgroundColor: isTransparent
-          ? adjustOpacity(theme.theme.settings.foreground!, 0.1)
-          : adjustBrightness(theme.theme.settings.background!, 0.3)
+          ? isActive
+            ? adjustOpacity(theme.options.settings.foreground!, 0.1)
+            : "transparent"
+          : isActive
+            ? adjustBrightness(theme.options.settings.background!, 0.3)
+            : "transparent"
       }}
     >
       {/* using img tag as next/image is not working with dom-to-image */}
       {isEditor ? (
         <DropdownMenu>
           <DropdownMenuTrigger data-testid="editor-tab-icon">
-            <img src={tab.tabExtension!.icon.src} alt={tab.tabExtension?.extension} width={18} height={18} />
+            <img src={tab.extension.icon.src} alt={tab.extension?.extension} width={18} height={18} />
           </DropdownMenuTrigger>
           <DropdownMenuContent data-testid="editor-tab-icon-dropdown" className="min-w-0">
             {fileExtensions?.map((ext) => (
@@ -63,7 +94,7 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <img src={tab.tabExtension!.icon.src} alt={tab.tabExtension?.extension || ""} width={18} height={18} />
+        <img src={tab.extension.icon.src} alt={tab.extension.extension || ""} width={18} height={18} />
       )}
 
       {isEditor ? (
@@ -71,11 +102,25 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
           data-testid="editor-tab-name"
           type="text"
           className="min-w-3 bg-transparent text-[15px] outline-none"
-          value={tab.tabName}
-          onChange={(e) => handleName(e.target.value)}
+          value={name}
+          onChange={(e) => handleNameChange(e)}
         />
       ) : (
-        <span className="text-[15px]">{tab.tabName}</span>
+        <span className="text-[15px]">{name}</span>
+      )}
+      {isActive && tabs.length > 1 && (
+        <button
+          data-exclude
+          data-testid="editor-tab-delete"
+          onClick={(e) => {
+            e.stopPropagation()
+            handleDelete()
+          }}
+          type="button"
+          className="rounded-full opacity-65 duration-200 hover:opacity-100"
+        >
+          <X size={16} />
+        </button>
       )}
     </div>
   )

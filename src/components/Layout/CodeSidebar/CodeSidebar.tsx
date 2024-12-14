@@ -20,7 +20,7 @@ import { ChevronRight } from "lucide-react"
 import { useState } from "react"
 
 function CodeSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [opened, setOpened] = useState<string[]>(["Container"])
+  const [opened, setOpened] = useState<string[]>(["Container", "Editor", "Code", "Font"])
   const { setOpen, open } = useSidebar()
 
   return (

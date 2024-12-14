@@ -1,7 +1,9 @@
-import type { Theme } from "@/data/editor-themes"
+import type { EditorConfig } from "@/types/editor-config.type"
 import type { Preset } from "@/types/presets.type"
-import languageConfigs from "@/data/language-configs"
-import { cn, generateConfig } from "@/utils/helpers"
+import { headers } from "@/data/editor-headers"
+import { languages } from "@/data/language-configs"
+import { usePreset } from "@/hooks/use-preset"
+import { cn, resolveTheme } from "@/utils/helpers"
 import createTheme from "@uiw/codemirror-themes"
 import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { useCallback } from "react"
@@ -14,21 +16,11 @@ type IProps = {
 }
 
 const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
+  const { generateConfig } = usePreset()
+
   const editorConfig = generateConfig(preset)
 
-  const theme: Theme = editorConfig.isTransparent
-    ? {
-        ...editorConfig.theme,
-        theme: {
-          ...editorConfig.theme.theme,
-          settings: {
-            ...editorConfig.theme.theme.settings,
-            gutterBackground: "transparent",
-            background: "transparent"
-          }
-        }
-      }
-    : editorConfig.theme
+  const theme = resolveTheme(editorConfig.themeId, editorConfig.isTransparent)
 
   const fontFamily = useCallback(
     () =>
@@ -49,6 +41,13 @@ const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
       }),
     [editorConfig.fontFamily, editorConfig.fontWeight, editorConfig.isLigatures, editorConfig.lineHeight]
   )
+
+  function renderHeader(view: EditorConfig["headerId"]) {
+    const selectedHeader = headers.find((header) => header.id === view)
+    return selectedHeader?.component()
+  }
+
+  const extensions = [languages.find((lang) => lang.id === "javascript")!.syntax(), fontFamily()]
 
   return (
     <div
@@ -72,10 +71,10 @@ const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
         <div
           style={{
             backgroundColor: editorConfig.isTransparent
-              ? editorConfig.theme.theme.theme === "light"
+              ? theme.options.theme === "light"
                 ? "rgba(255,255,255, 0.7)"
                 : "rgba(0,0,0, 0.7)"
-              : editorConfig.theme.theme.settings.background,
+              : theme.options.settings.background,
             backdropFilter: editorConfig.isTransparent ? "blur(10px)" : "none",
             boxShadow: editorConfig.shadow.value,
             border: editorConfig.border.value,
@@ -83,10 +82,10 @@ const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
           }}
           className={cn(
             "relative z-[1] w-full flex flex-col items-start justify-start",
-            editorConfig.theme.theme.theme === "dark" ? "text-white" : "text-black"
+            theme.options.theme === "dark" ? "text-white" : "text-black"
           )}
         >
-          {editorConfig.isHeader && editorConfig.headerType.value()}
+          {editorConfig.isHeader && renderHeader(editorConfig.headerId)}
 
           <div className="pointer-events-none w-full cursor-default select-none bg-transparent px-1 py-3">
             <CodeMirror
@@ -100,8 +99,8 @@ const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
               }}
               className="select-none bg-transparent"
               value={`let greeting = "Hello";`}
-              theme={createTheme(theme.theme)}
-              extensions={[languageConfigs.find((lang) => lang.label === "JavaScript")!.lang, fontFamily()]}
+              theme={createTheme(theme.options)}
+              extensions={extensions}
             />
           </div>
         </div>

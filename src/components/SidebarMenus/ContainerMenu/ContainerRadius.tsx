@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
-import { type Radius, radiusList } from "@/data/radius-presets"
+import { radii, type Radius } from "@/data/radius-presets"
 import useStore from "@/store/store"
 import { cn } from "@/utils/helpers"
 import { radiusSchema } from "@/validations/editor-config.validation"
@@ -53,7 +53,7 @@ const ContainerRadius = () => {
             aria-expanded={open}
             className="max-h-8 justify-between"
           >
-            {radiusList.find((radius) => radius.name === selectedPadding.name)?.name || "Custom"}
+            {radii.find((radius) => radius.name === selectedPadding.name)?.name || "Custom"}
             <ChevronDown className="ml-auto mr-0 size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
           </Button>
         </PopoverTrigger>
@@ -73,7 +73,7 @@ const ContainerRadius = () => {
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {radiusList.map((radius) => (
+                {radii.map((radius) => (
                   <CommandItem
                     key={radius.name}
                     value={radius.name}

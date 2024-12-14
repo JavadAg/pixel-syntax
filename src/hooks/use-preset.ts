@@ -1,27 +1,28 @@
+import type { EditorConfig } from "@/types/editor-config.type"
+import type { Preset } from "@/types/presets.type"
+import { borders } from "@/data/border-presets"
+import { fonts } from "@/data/editor-fonts"
+import { paddings } from "@/data/padding-presets"
+import { radii } from "@/data/radius-presets"
+import { shadows } from "@/data/shadow-presets"
 import db from "@/libs/db"
 import useStore from "@/store/store"
 import { useLiveQuery } from "dexie-react-hooks"
 import { debounce } from "lodash-es"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
 const nameSchema = z.string().min(1).max(20)
 
 export const usePreset = () => {
+  const [activePreset, setActivePreset] = useState<Preset | null>(null)
   const presets = useLiveQuery(() => db.presets.toArray())
-  const activePresetId = useLiveQuery(() => db.table("appState").get("activePresetId"))
-  const activePreset = useLiveQuery(() => {
-    if (activePresetId?.value) {
-      return presets?.find((preset) => preset.id === activePresetId.value)
-    }
-
-    return undefined
-  }, [activePresetId, presets])
 
   const editorConfig = useStore((state) => state.editorConfig)
+  const setConfig = useStore((state) => state.setConfig)
 
-  const configs = {
+  const presetConfig = {
     background: editorConfig.background,
     paddingX: editorConfig.paddingX.name,
     paddingY: editorConfig.paddingY.name,
@@ -29,11 +30,11 @@ export const usePreset = () => {
     opacity: editorConfig.opacity,
     isTransparent: editorConfig.isTransparent,
     isHeader: editorConfig.isHeader,
-    headerType: editorConfig.headerType.name,
+    headerId: editorConfig.headerId,
     shadow: editorConfig.shadow.name,
     border: editorConfig.border.name,
     editorRadius: editorConfig.editorRadius.name,
-    theme: editorConfig.theme.id,
+    themeId: editorConfig.themeId,
     isLineNumber: editorConfig.isLineNumber,
     fontFamily: editorConfig.fontFamily.id,
     fontSize: editorConfig.fontSize,
@@ -42,34 +43,53 @@ export const usePreset = () => {
     isLigatures: editorConfig.isLigatures
   }
 
-  async function addPreset() {
-    try {
-      const preset = await db.presets.add({
-        name: "New Preset",
-        updatedAt: new Date(),
-        createdAt: new Date(),
-        configs
-      })
+  function generateConfig(preset: Preset): EditorConfig {
+    const { configs } = preset
 
-      await db.table("appState").put({ key: "activePresetId", value: preset })
+    const findByName = <T extends { name: string }>(list: T[], name: string) => list.find((item) => item.name === name)!
 
-      toast.success("Preset added")
-    } catch (error: any) {
-      console.error(error)
-      "message" in error
-        ? toast.error(`Failed to add ${name}: ${error.message}`)
-        : toast.error(`Failed to add ${name}: ${error}`)
+    const findById = <T extends { id: number | string }>(list: T[], id: number | string) =>
+      list.find((item) => item.id === id)!
+
+    const font = findById(fonts, configs.fontFamily)
+
+    return {
+      background: configs.background,
+      paddingX: findByName(paddings, configs.paddingX),
+      paddingY: findByName(paddings, configs.paddingY),
+      radius: findByName(radii, configs.radius),
+      opacity: configs.opacity,
+      isTransparent: configs.isTransparent,
+      isHeader: configs.isHeader,
+      headerId: configs.headerId,
+      shadow: findByName(shadows, configs.shadow),
+      border: findByName(borders, configs.border),
+      editorRadius: findByName(radii, configs.editorRadius),
+      themeId: configs.themeId,
+      isLineNumber: configs.isLineNumber,
+      fontFamily: font,
+      fontSize: configs.fontSize,
+      fontWeight: font.weights.find((w) => w.name === configs.fontWeight)!,
+      lineHeight: configs.lineHeight,
+      isLigatures: configs.isLigatures
     }
   }
 
-  async function changePreset(presetId: number) {
+  async function addPreset() {
     try {
-      await db.table("appState").put({ key: "activePresetId", value: presetId })
+      const id = await db.presets.add({
+        name: "New Preset",
+        updatedAt: new Date(),
+        createdAt: new Date(),
+        configs: presetConfig
+      })
+
+      const preset = await db.presets.get(id)
+      preset && setActivePreset(preset)
+      toast.success("Preset added")
     } catch (error: any) {
       console.error(error)
-      "message" in error
-        ? toast.error(`Failed to change ${name}: ${error.message}`)
-        : toast.error(`Failed to change ${name}: ${error}`)
+      toast.error(`Failed to add: ${"message" in error ? error.message : String(error)}`)
     }
   }
 
@@ -85,37 +105,46 @@ export const usePreset = () => {
     try {
       if (name) {
         nameSchema.parse(name)
-        await db.presets.where("id").equals(presetId).modify({ name, updatedAt: new Date() })
+        await db.presets.update(presetId, { name, updatedAt: new Date() })
       } else {
-        await db.presets.where("id").equals(presetId).modify({ configs, updatedAt: new Date() })
+        await db.presets.update(presetId, { configs: presetConfig, updatedAt: new Date() })
       }
+
+      const preset = await db.presets.get(presetId)
+      setActivePreset(preset!)
       toast.success("Preset updated")
     } catch (error: any) {
       console.error(error)
-      "message" in error
-        ? toast.error(`Failed to update ${name}: ${error.message}`)
-        : toast.error(`Failed to update ${name}: ${error}`)
+      toast.error(`Failed to update: ${"message" in error ? error.message : String(error)}`)
     }
   }
 
   async function deletePreset(presetId: number) {
     try {
-      const isCurrentPreset = activePresetId?.value === presetId
-
-      await db.presets.where("id").equals(presetId).delete()
-
-      if (isCurrentPreset) {
-        await db.table("appState").put({ key: "activePresetId", value: null })
-      }
-
+      await db.presets.delete(presetId)
       toast.success("Preset deleted")
     } catch (error: any) {
       console.error(error)
-      "message" in error
-        ? toast.error(`Failed to delete ${name}: ${error.message}`)
-        : toast.error(`Failed to delete ${name}: ${error}`)
+      toast.error(`Failed to delete: ${"message" in error ? error.message : String(error)}`)
     }
   }
 
-  return { presets, activePreset, activePresetId, addPreset, changePreset, updatePreset, deletePreset, renamePreset }
+  function changePreset(id: number) {
+    const preset = presets?.find((p) => p.id === id)
+    if (preset) {
+      setActivePreset(preset)
+      setConfig(generateConfig(preset))
+    }
+  }
+
+  return {
+    presets,
+    activePreset,
+    changePreset,
+    addPreset,
+    updatePreset,
+    deletePreset,
+    renamePreset,
+    generateConfig
+  }
 }

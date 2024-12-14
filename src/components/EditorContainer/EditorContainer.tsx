@@ -1,7 +1,10 @@
+"use client"
+
 import useStore from "@/store/store"
 import { Resizable } from "re-resizable"
+import EditorWrapper from "./EditorWrapper/EditorWrapper"
 
-const Container = ({ children }: { children: React.ReactNode }) => {
+const EditorContainer = () => {
   const editorConfig = useStore((state) => state.editorConfig)
   const setEditorRef = useStore((state) => state.setEditorRef)
 
@@ -37,13 +40,13 @@ const Container = ({ children }: { children: React.ReactNode }) => {
             inset: 0,
             borderRadius: editorConfig.radius.value,
             background: editorConfig.background,
-            opacity: editorConfig.opacity
+            opacity: editorConfig.opacity / 100
           }}
         />
-        {children}
+        <EditorWrapper />
       </div>
     </Resizable>
   )
 }
 
-export default Container
+export default EditorContainer

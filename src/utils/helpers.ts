@@ -1,12 +1,8 @@
-import type { Preset } from "@/types/presets.type"
 import type { Plugin as PrettierPlugin } from "prettier"
-import { borderList } from "@/data/border-presets"
-import { fonts } from "@/data/editor-fonts"
-import { headersList } from "@/data/editor-headers"
-import { themes } from "@/data/editor-themes"
-import { paddingList } from "@/data/padding-presets"
-import { radiusList } from "@/data/radius-presets"
-import { shadowList } from "@/data/shadow-presets"
+import { type Font, fonts } from "@/data/editor-fonts"
+import { type EditorHeader, headers } from "@/data/editor-headers"
+import { type Theme, themes } from "@/data/editor-themes"
+import { type Language, languages } from "@/data/language-configs"
 import chroma from "chroma-js"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
@@ -37,34 +33,28 @@ export const adjustOpacity = (hex: string, factor: number): string => {
   return color.alpha(factor).hex()
 }
 
-export function generateConfig(preset: Preset) {
-  const { configs } = preset
+export const resolveTheme = (id: string, isTransparent: boolean): Theme => {
+  const theme = themes.find((theme) => theme.id === id)!
 
-  const findByName = <T extends { name: string }>(list: T[], name: string) => list.find((item) => item.name === name)!
+  return isTransparent
+    ? {
+        ...theme,
+        options: {
+          ...theme.options,
+          settings: { ...theme.options.settings, gutterBackground: "transparent", background: "transparent" }
+        }
+      }
+    : theme
+}
 
-  const findById = <T extends { id: number | string }>(list: T[], id: number | string) =>
-    list.find((item) => item.id === id)!
+export const resolveHeader = (id: EditorHeader["id"]): EditorHeader => {
+  return headers.find((header) => header.id === id)!
+}
 
-  const font = findById(fonts, configs.fontFamily)
+export const resolveLanguage = (id: string): Language => {
+  return languages.find((lang) => lang.id === id)!
+}
 
-  return {
-    background: configs.background,
-    paddingX: findByName(paddingList, configs.paddingX),
-    paddingY: findByName(paddingList, configs.paddingY),
-    radius: findByName(radiusList, configs.radius),
-    opacity: configs.opacity,
-    isTransparent: configs.isTransparent,
-    isHeader: configs.isHeader,
-    headerType: findByName(headersList, configs.headerType),
-    shadow: findByName(shadowList, configs.shadow),
-    border: findByName(borderList, configs.border),
-    editorRadius: findByName(radiusList, configs.editorRadius),
-    theme: findById(themes, configs.theme),
-    isLineNumber: configs.isLineNumber,
-    fontFamily: font,
-    fontSize: configs.fontSize,
-    fontWeight: font.weights.find((w) => w.name === configs.fontWeight)!,
-    lineHeight: configs.lineHeight,
-    isLigatures: configs.isLigatures
-  }
+export const resolveFont = (id: string): Font => {
+  return fonts.find((font) => font.id === id)!
 }

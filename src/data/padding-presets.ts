@@ -3,7 +3,7 @@ export type Padding = {
   value: number
 }
 
-export const paddingList: Padding[] = [
+export const paddings: Padding[] = [
   {
     name: "None",
     value: 0

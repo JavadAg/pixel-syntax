@@ -50,11 +50,21 @@ const ExportImage = () => {
       {}
     )
 
+    function filter(node: Node) {
+      if (node instanceof HTMLElement) {
+        if (node.hasAttribute("data-exclude")) {
+          return false
+        }
+      }
+      return true
+    }
+
     if (editorRef) {
       try {
         const dataUrl = await domtoimage[value](editorRef, {
           copyDefaultStyles: false,
           scale: exportScale.value,
+          filter,
           ...exportOptions
         })
 

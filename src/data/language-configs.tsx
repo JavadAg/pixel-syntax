@@ -44,26 +44,31 @@ import typescriptIcon from "@/assets/icons/typescript.svg"
 import vueIcon from "@/assets/icons/vue.svg"
 import xmlIcon from "@/assets/icons/xml.svg"
 import yamlIcon from "@/assets/icons/yaml.svg"
-import { langs } from "@uiw/codemirror-extensions-langs"
+import { langs, type LanguageName } from "@uiw/codemirror-extensions-langs"
 
-export type LanguageConfig = {
-  label: string
-  lang: LanguageSupport | StreamLanguage<unknown>
+export type Language = {
+  id: LanguageName
+  name: string
+  syntax: () => LanguageSupport | StreamLanguage<unknown>
   prettier?: {
     parser: string
     plugin: (() => Promise<PrettierPlugin>) | (() => Promise<PrettierPlugin>)[]
   }
-  fileExtensions: {
+  extensions: {
     key: string
     extension: string
     icon: any
   }[]
 }
 
-const languageConfigs: LanguageConfig[] = [
+export const languages: Language[] = [
   {
-    label: "JavaScript",
-    lang: langs.javascript({ jsx: true }),
+    id: "javascript",
+    name: "JavaScript",
+    syntax: () =>
+      langs.javascript({
+        jsx: true
+      }),
     prettier: {
       parser: "babel",
       plugin: [
@@ -71,7 +76,7 @@ const languageConfigs: LanguageConfig[] = [
         () => import("prettier/plugins/estree") as Promise<PrettierPlugin>
       ]
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "js",
         extension: ".js",
@@ -122,16 +127,6 @@ const languageConfigs: LanguageConfig[] = [
         extension: ".svelte",
         icon: svelteIcon
       },
-      /* {
-        key: "mjs",
-        extension: ".mjs",
-        icon: javascriptIcon
-      },
-      {
-        key: "cjs",
-        extension: ".cjs",
-        icon: javascriptIcon
-      }, */
       {
         key: "babel-js",
         extension: ".babel.js",
@@ -140,11 +135,13 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "TypeScript",
-    lang: langs.javascript({
-      jsx: true,
-      typescript: true
-    }),
+    id: "typescript",
+    name: "TypeScript",
+    syntax: () =>
+      langs.javascript({
+        jsx: true,
+        typescript: true
+      }),
     prettier: {
       parser: "typescript",
       plugin: [
@@ -152,7 +149,7 @@ const languageConfigs: LanguageConfig[] = [
         () => import("prettier/plugins/estree") as Promise<PrettierPlugin>
       ]
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "ts",
         extension: ".ts",
@@ -206,10 +203,11 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Python",
-    lang: langs.python(),
+    id: "python",
+    name: "Python",
+    syntax: () => langs.python(),
 
-    fileExtensions: [
+    extensions: [
       {
         key: "py",
         extension: ".py",
@@ -218,13 +216,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "JSON",
-    lang: langs.json(),
+    id: "json",
+    name: "JSON",
+    syntax: () => langs.json(),
     prettier: {
       parser: "json5",
       plugin: () => import("prettier/parser-babel")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "json",
         extension: ".json",
@@ -233,9 +232,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Swift",
-    lang: langs.swift(),
-    fileExtensions: [
+    id: "swift",
+    name: "Swift",
+    syntax: () => langs.swift(),
+    extensions: [
       {
         key: "swift",
         extension: ".swift",
@@ -244,9 +244,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Docker",
-    lang: langs.dockerfile(),
-    fileExtensions: [
+    id: "dockerfile",
+    name: "Docker",
+    syntax: () => langs.dockerfile(),
+    extensions: [
       {
         key: "dockerfile",
         extension: "Dockerfile",
@@ -255,9 +256,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Shell",
-    lang: langs.shell(),
-    fileExtensions: [
+    id: "shell",
+    name: "Shell",
+    syntax: () => langs.shell(),
+    extensions: [
       {
         key: "sh",
         extension: ".sh",
@@ -266,9 +268,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Dart",
-    lang: langs.dart(),
-    fileExtensions: [
+    id: "dart",
+    name: "Dart",
+    syntax: () => langs.dart(),
+    extensions: [
       {
         key: "dart",
         extension: ".dart",
@@ -277,9 +280,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "YAML",
-    lang: langs.yaml(),
-    fileExtensions: [
+    id: "yaml",
+    name: "YAML",
+    syntax: () => langs.yaml(),
+    extensions: [
       {
         key: "yaml",
         extension: ".yaml",
@@ -294,10 +298,11 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Go",
-    lang: langs.go(),
+    id: "go",
+    name: "Go",
+    syntax: () => langs.go(),
 
-    fileExtensions: [
+    extensions: [
       {
         key: "go",
         extension: ".go",
@@ -306,10 +311,11 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Pascal",
-    lang: langs.pascal(),
+    id: "pascal",
+    name: "Pascal",
+    syntax: () => langs.pascal(),
 
-    fileExtensions: [
+    extensions: [
       {
         key: "pas",
         extension: ".pas",
@@ -318,10 +324,11 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "PowerShell",
-    lang: langs.powershell(),
+    id: "powershell",
+    name: "PowerShell",
+    syntax: () => langs.powershell(),
 
-    fileExtensions: [
+    extensions: [
       {
         key: "ps1",
         extension: ".ps1",
@@ -330,14 +337,15 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "HTML",
-    lang: langs.html(),
+    id: "html",
+    name: "HTML",
+    syntax: () => langs.html(),
 
     prettier: {
       parser: "html",
       plugin: () => import("prettier/parser-html")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "html",
         extension: ".html",
@@ -346,13 +354,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "CSS",
-    lang: langs.css(),
+    id: "css",
+    name: "CSS",
+    syntax: () => langs.css(),
     prettier: {
       parser: "css",
       plugin: () => import("prettier/parser-postcss")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "css",
         extension: ".css",
@@ -366,13 +375,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "SCSS",
-    lang: langs.sass(),
+    id: "sass",
+    name: "SCSS",
+    syntax: () => langs.sass(),
     prettier: {
       parser: "scss",
       plugin: () => import("prettier/parser-postcss")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "scss",
         extension: ".scss",
@@ -381,9 +391,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Java",
-    lang: langs.java(),
-    fileExtensions: [
+    id: "java",
+    name: "Java",
+    syntax: () => langs.java(),
+    extensions: [
       {
         key: "java",
         extension: ".java",
@@ -392,9 +403,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Kotlin",
-    lang: langs.kotlin(),
-    fileExtensions: [
+    id: "kotlin",
+    name: "Kotlin",
+    syntax: () => langs.kotlin(),
+    extensions: [
       {
         key: "kt",
         extension: ".kt",
@@ -403,13 +415,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Rust",
-    lang: langs.rust(),
+    id: "rust",
+    name: "Rust",
+    syntax: () => langs.rust(),
     prettier: {
       parser: "jinx-rust",
       plugin: () => import("prettier-plugin-rust")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "rs",
         extension: ".rs",
@@ -418,13 +431,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "SQL",
-    lang: langs.sql(),
+    id: "sql",
+    name: "SQL",
+    syntax: () => langs.sql(),
     prettier: {
       parser: "sql",
       plugin: () => import("prettier-plugin-sql") as Promise<PrettierPlugin>
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "sql",
         extension: ".sql",
@@ -433,13 +447,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "TOML",
-    lang: langs.toml(),
+    id: "toml",
+    name: "TOML",
+    syntax: () => langs.toml(),
     prettier: {
       parser: "toml",
       plugin: () => import("prettier-plugin-toml") as Promise<PrettierPlugin>
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "toml",
         extension: ".toml",
@@ -448,9 +463,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "C#",
-    lang: langs.csharp(),
-    fileExtensions: [
+    id: "csharp",
+    name: "C#",
+    syntax: () => langs.csharp(),
+    extensions: [
       {
         key: "cs",
         extension: ".cs",
@@ -459,13 +475,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "PHP",
-    lang: langs.php(),
+    id: "php",
+    name: "PHP",
+    syntax: () => langs.php(),
     prettier: {
       parser: "php",
       plugin: () => import("@prettier/plugin-php")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "php",
         extension: ".php",
@@ -474,13 +491,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Markdown",
-    lang: langs.markdown(),
+    id: "markdown",
+    name: "Markdown",
+    syntax: () => langs.markdown(),
     prettier: {
       parser: "markdown",
       plugin: () => import("prettier/parser-markdown")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "md",
         extension: ".md",
@@ -489,9 +507,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "C++",
-    lang: langs.cpp(),
-    fileExtensions: [
+    id: "cpp",
+    name: "C++",
+    syntax: () => langs.cpp(),
+    extensions: [
       {
         key: "cpp",
         extension: ".cpp",
@@ -500,9 +519,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "C",
-    lang: langs.c(),
-    fileExtensions: [
+    id: "c",
+    name: "C",
+    syntax: () => langs.c(),
+    extensions: [
       {
         key: "c",
         extension: ".c",
@@ -511,13 +531,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "XML",
-    lang: langs.xml(),
+    id: "xml",
+    name: "XML",
+    syntax: () => langs.xml(),
     prettier: {
       parser: "xml",
       plugin: () => import("@prettier/plugin-xml").then((m) => m.default) as Promise<PrettierPlugin>
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "xml",
         extension: ".xml",
@@ -526,9 +547,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Ruby",
-    lang: langs.ruby(),
-    fileExtensions: [
+    id: "ruby",
+    name: "Ruby",
+    syntax: () => langs.ruby(),
+    extensions: [
       {
         key: "rb",
         extension: ".rb",
@@ -537,9 +559,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Scala",
-    lang: langs.scala(),
-    fileExtensions: [
+    id: "scala",
+    name: "Scala",
+    syntax: () => langs.scala(),
+    extensions: [
       {
         key: "scala",
         extension: ".scala",
@@ -548,13 +571,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Nginx",
-    lang: langs.nginx(),
+    id: "nginx",
+    name: "Nginx",
+    syntax: () => langs.nginx(),
     prettier: {
       parser: "nginx",
       plugin: () => import("prettier-plugin-nginx") as Promise<PrettierPlugin>
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "nginx",
         extension: ".nginx",
@@ -563,13 +587,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Solidity",
-    lang: langs.solidity(),
+    id: "solidity",
+    name: "Solidity",
+    syntax: () => langs.solidity(),
     prettier: {
       parser: "solidity",
       plugin: () => import("prettier-plugin-solidity")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "solidity",
         extension: ".solidity",
@@ -578,13 +603,14 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Less",
-    lang: langs.less(),
+    id: "less",
+    name: "Less",
+    syntax: () => langs.less(),
     prettier: {
       parser: "less",
       plugin: () => import("prettier/parser-postcss")
     },
-    fileExtensions: [
+    extensions: [
       {
         key: "less",
         extension: ".less",
@@ -593,9 +619,10 @@ const languageConfigs: LanguageConfig[] = [
     ]
   },
   {
-    label: "Perl",
-    lang: langs.perl(),
-    fileExtensions: [
+    id: "perl",
+    name: "Perl",
+    syntax: () => langs.perl(),
+    extensions: [
       {
         key: "pl",
         extension: ".pl",
@@ -605,4 +632,13 @@ const languageConfigs: LanguageConfig[] = [
   }
 ]
 
-export default languageConfigs
+export const languageNames = languages.map((item) => {
+  return {
+    id: item.id,
+    name: item.name
+  }
+})
+
+export function getLanguage(id: string) {
+  return languages.find((lang) => lang.id === id)!
+}

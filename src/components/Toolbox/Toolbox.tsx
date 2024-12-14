@@ -1,3 +1,5 @@
+"use client"
+
 import ExportImage from "./ExportImage/ExportImage"
 import Formatter from "./Formatter/Formatter"
 
