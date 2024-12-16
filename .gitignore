@@ -49,3 +49,8 @@ local
 
 # vercel
 .vercel
+
+# PWA generated files
+/public/workbox-*
+/public/sw.js
+/public/precache-manifest.*
