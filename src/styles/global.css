@@ -387,19 +387,6 @@
   }
 }
 
-.popup_tabs {
-  width: 100% !important;
-  box-shadow: none !important;
-}
-
-.popup_tabs-header {
-  height: 30px !important;
-
-  & > div {
-    height: 30px !important;
-  }
-}
-
 .cm-editor:focus-within {
   outline: none !important;
 }

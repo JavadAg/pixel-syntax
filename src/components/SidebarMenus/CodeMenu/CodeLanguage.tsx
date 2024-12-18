@@ -1,4 +1,3 @@
-import type { LanguageName } from "@uiw/codemirror-extensions-langs"
 import Button from "@/components/ui/Button"
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/Command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
@@ -16,8 +15,9 @@ const CodeLanguage = () => {
   const getTab = useStore((state) => state.getTab)
   const updateTab = useStore((state) => state.updateTab)
 
-  function handleLanguage(id: LanguageName) {
-    updateTab(activeTabId, { languageId: id })
+  function handleLanguage(id: string) {
+    const selectedLang = resolveLanguage(id)
+    updateTab(activeTabId, { languageId: selectedLang.id, extension: selectedLang.extensions[0]! })
     setOpen(false)
   }
 

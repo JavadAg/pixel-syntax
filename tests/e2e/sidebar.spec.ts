@@ -78,8 +78,8 @@ test.describe("ContainerBg Component", () => {
   let accordionContent: Locator
 
   test.beforeEach(async () => {
-    accordionTrigger = page.locator('[data-testid="container-bg"]')
-    accordionContent = page.locator('[data-testid="accordion-content"]')
+    accordionTrigger = page.locator('[data-testid="container-bg-trigger"]')
+    accordionContent = page.locator('[data-testid="container-bg-content"]')
 
     await expect(accordionTrigger).toBeVisible()
 
