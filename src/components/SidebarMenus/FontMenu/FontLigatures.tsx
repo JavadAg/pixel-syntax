@@ -13,7 +13,7 @@ const FontLigatures = () => {
 
   return (
     <SidebarItemWrapper>
-      <span>Ligatures</span>
+      <span>Water</span>
       <div className="flex items-center justify-end">
         <Switch
           data-testid="font-ligatures-switch"

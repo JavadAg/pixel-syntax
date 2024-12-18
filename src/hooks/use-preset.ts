@@ -40,7 +40,11 @@ export const usePreset = () => {
     fontSize: editorConfig.fontSize,
     fontWeight: editorConfig.fontWeight.name,
     lineHeight: editorConfig.lineHeight,
-    isLigatures: editorConfig.isLigatures
+    isLigatures: editorConfig.isLigatures,
+    isWatermark: editorConfig.isWatermark,
+    watermarkLocation: editorConfig.watermarkLocation,
+    watermarkOpacity: editorConfig.watermarkOpacity,
+    watermarkText: editorConfig.watermarkText
   }
 
   function generateConfig(preset: Preset): EditorConfig {
@@ -71,7 +75,11 @@ export const usePreset = () => {
       fontSize: configs.fontSize,
       fontWeight: font.weights.find((w) => w.name === configs.fontWeight)!,
       lineHeight: configs.lineHeight,
-      isLigatures: configs.isLigatures
+      isLigatures: configs.isLigatures,
+      isWatermark: configs.isWatermark || true,
+      watermarkLocation: configs.watermarkLocation || "container",
+      watermarkOpacity: configs.watermarkOpacity || 100,
+      watermarkText: configs.watermarkText || "Pixel Syntax"
     }
   }
 

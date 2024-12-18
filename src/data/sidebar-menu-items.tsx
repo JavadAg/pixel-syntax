@@ -15,15 +15,16 @@ import FontLigatures from "@/components/SidebarMenus/FontMenu/FontLigatures"
 import FontLineHeight from "@/components/SidebarMenus/FontMenu/FontLineHeight"
 import FontSize from "@/components/SidebarMenus/FontMenu/FontSize"
 import FontWeight from "@/components/SidebarMenus/FontMenu/FontWeight"
-import { Box, CaseSensitive, Code, SquareChartGantt } from "lucide-react"
+import WatermarkControl from "@/components/SidebarMenus/OtherMenu/WatermarkControl"
+import { Box, CaseSensitive, Code, Ellipsis, SquareChartGantt } from "lucide-react"
 
-export type SidebarMenu = {
-  label: string
+export type SidebarMenuListItem = {
+  label: "Container" | "Editor" | "Code" | "Font" | "Other"
   icon: typeof Code
   subItems: { label: string; component: React.ReactElement }[]
 }
 
-export const sidebar_menu_list: SidebarMenu[] = [
+export const sidebar_menu_list: SidebarMenuListItem[] = [
   {
     label: "Container",
     icon: Box,
@@ -113,6 +114,16 @@ export const sidebar_menu_list: SidebarMenu[] = [
       {
         label: "Line Height",
         component: <FontLineHeight />
+      }
+    ]
+  },
+  {
+    label: "Other",
+    icon: Ellipsis,
+    subItems: [
+      {
+        label: "Watermark",
+        component: <WatermarkControl />
       }
     ]
   }

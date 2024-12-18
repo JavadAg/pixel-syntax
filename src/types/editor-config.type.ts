@@ -25,4 +25,8 @@ export type EditorConfig = {
   fontWeight: Font["weights"][number]
   lineHeight: string
   isLigatures: boolean
+  isWatermark: boolean
+  watermarkLocation: "container" | "editor"
+  watermarkOpacity: number
+  watermarkText: string
 }

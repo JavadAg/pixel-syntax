@@ -3,6 +3,7 @@
 import useStore from "@/store/store"
 import { Resizable } from "re-resizable"
 import EditorWrapper from "./EditorWrapper/EditorWrapper"
+import Watermark from "./Watermark/Watermark"
 
 const EditorContainer = () => {
   const editorConfig = useStore((state) => state.editorConfig)
@@ -26,7 +27,7 @@ const EditorContainer = () => {
       <div
         data-testid="container-wrapper"
         ref={setEditorRef}
-        className="flex w-full items-center justify-center bg-transparent"
+        className="relative flex w-full items-center justify-center bg-transparent"
         style={{
           padding: `${editorConfig.paddingY.value}px ${editorConfig.paddingX.value}px`,
           borderRadius: editorConfig.radius.value,
@@ -43,6 +44,7 @@ const EditorContainer = () => {
             opacity: editorConfig.opacity / 100
           }}
         />
+        {editorConfig.isWatermark && editorConfig.watermarkLocation === "container" && <Watermark />}
         <EditorWrapper />
       </div>
     </Resizable>

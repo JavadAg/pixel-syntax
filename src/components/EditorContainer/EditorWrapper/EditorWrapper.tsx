@@ -7,6 +7,7 @@ import createTheme from "@uiw/codemirror-themes"
 import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { useCallback } from "react"
 import EditorTab from "../../EditorHeaders/EditorTab/EditorTab"
+import Watermark from "../Watermark/Watermark"
 
 const EditorWrapper = () => {
   const editorConfig = useStore((state) => state.editorConfig)
@@ -78,7 +79,8 @@ const EditorWrapper = () => {
       style={{ ...wrapperStyle() }}
       className={cn(
         "relative z-[1] flex w-full min-w-fit flex-col items-start justify-start",
-        theme.options.theme === "dark" ? "text-white" : "text-black"
+        theme.options.theme === "dark" ? "text-white" : "text-black",
+        editorConfig.isWatermark && editorConfig.watermarkLocation === "editor" && "pb-3"
       )}
     >
       {editorConfig.isHeader && renderHeader(editorConfig.headerId)}
@@ -99,6 +101,7 @@ const EditorWrapper = () => {
           onChange={updateTabContent}
         />
       </div>
+      {editorConfig.isWatermark && editorConfig.watermarkLocation === "editor" && <Watermark />}
     </div>
   )
 }

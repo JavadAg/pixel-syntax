@@ -15,12 +15,12 @@ import {
   SidebarMenuSubItem,
   useSidebar
 } from "@/components/ui/Sidebar"
-import { sidebar_menu_list } from "@/data/sidebar-menu-items"
+import { sidebar_menu_list, type SidebarMenuListItem } from "@/data/sidebar-menu-items"
 import { ChevronRight } from "lucide-react"
 import { useState } from "react"
 
 function CodeSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [opened, setOpened] = useState<string[]>(["Container", "Editor", "Code", "Font"])
+  const [opened, setOpened] = useState<SidebarMenuListItem["label"][]>(["Container", "Editor", "Code", "Font", "Other"])
   const { setOpen, open } = useSidebar()
 
   return (

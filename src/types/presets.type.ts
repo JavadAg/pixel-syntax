@@ -19,6 +19,10 @@ type PresetConfig = {
   fontWeight: EditorConfig["fontWeight"]["name"]
   lineHeight: EditorConfig["lineHeight"]
   isLigatures: EditorConfig["isLigatures"]
+  isWatermark: EditorConfig["isWatermark"]
+  watermarkLocation: EditorConfig["watermarkLocation"]
+  watermarkOpacity: EditorConfig["watermarkOpacity"]
+  watermarkText: EditorConfig["watermarkText"]
 }
 
 export type Preset = {
