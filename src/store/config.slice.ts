@@ -10,7 +10,7 @@ import { radii } from "@/data/radius-presets"
 import { shadows } from "@/data/shadow-presets"
 
 export const initialState: EditorConfig = {
-  background: gradientColors.colors[2]!,
+  background: gradientColors.colors[3]!,
   paddingX: paddings[5]!,
   paddingY: paddings[5]!,
   radius: radii[4]!,
@@ -33,6 +33,7 @@ export const initialState: EditorConfig = {
 export type EditorConfigSlice = {
   editorConfig: EditorConfig
   setConfig: (payload: Partial<EditorConfig>) => void
+  resetConfig: () => void
   setBackground: (payload: EditorConfig["background"]) => void
   setPadding: (axis: "paddingX" | "paddingY", payload: EditorConfig["paddingX"]) => void
   setRadius: (payload: EditorConfig["radius"]) => void
@@ -58,6 +59,7 @@ export const createEditorConfigSlice: StateCreator<EditorConfigSlice> = (set) =>
     set((state) => ({
       editorConfig: { ...state.editorConfig, ...payload }
     })),
+  resetConfig: () => set(() => ({ editorConfig: initialState })),
   setBackground: (payload) =>
     set((state) => ({
       editorConfig: {
