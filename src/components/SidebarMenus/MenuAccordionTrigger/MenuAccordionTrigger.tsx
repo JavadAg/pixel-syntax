@@ -4,14 +4,18 @@ import { ChevronDown } from "lucide-react"
 const MenuAccordionTrigger = ({
   children,
   title,
-  style
+  style,
+  ...props
 }: {
   style?: React.CSSProperties
   title: string
   children?: React.ReactNode
-}) => {
+} & React.ComponentProps<typeof AccordionTrigger>) => {
   return (
-    <AccordionTrigger className="grid h-full grid-cols-[1fr,2fr] gap-3 [&[data-state=open]>div>svg]:rotate-180">
+    <AccordionTrigger
+      {...props}
+      className="grid h-full grid-cols-[1fr,2fr] gap-3 [&[data-state=open]>div>svg]:rotate-180"
+    >
       <span className="w-fit whitespace-nowrap">{title}</span>
       <div
         style={style}

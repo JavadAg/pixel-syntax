@@ -34,32 +34,27 @@ export const colorSchema = z.string().regex(gradientRegex)
 |--------------------------------------------------
 */
 
-export const shadowSchema = z.string().refine(
-  (value) => {
-    const parts = value.trim().split(/\s+/)
+export const shadowSchema = z.string().refine((value) => {
+  const parts = value.trim().split(/\s+/)
 
-    if (parts.length < 4) return false
+  if (parts.length < 4) return false
 
-    const [xOffset, yOffset, blurRadius, ...rest] = parts
-    if (
-      (xOffset && !pixelRegex.test(xOffset)) ||
-      (yOffset && !pixelRegex.test(yOffset)) ||
-      (blurRadius && !pixelRegex.test(blurRadius))
-    ) {
-      return false
-    }
-
-    const color = rest.join(" ")
-    if (!rgbRegex.test(color) && !hexRegex.test(color) && !hslRegex.test(color)) {
-      return false
-    }
-
-    return true
-  },
-  {
-    message: "Invalid shadow format. Example: '0px 4px 6px rgba(0, 0, 0, 0.15)'"
+  const [xOffset, yOffset, blurRadius, ...rest] = parts
+  if (
+    (xOffset && !pixelRegex.test(xOffset)) ||
+    (yOffset && !pixelRegex.test(yOffset)) ||
+    (blurRadius && !pixelRegex.test(blurRadius))
+  ) {
+    return false
   }
-)
+
+  const color = rest.join(" ")
+  if (!rgbRegex.test(color) && !hexRegex.test(color) && !hslRegex.test(color)) {
+    return false
+  }
+
+  return true
+})
 
 /**
 |--------------------------------------------------
@@ -78,24 +73,19 @@ const namedColorRegex = /^[a-zA-Z]+$/
 // eslint-disable-next-line regexp/no-unused-capturing-group
 const colorRegex = new RegExp(`${hexRegex.source}|${rgbRegex.source}|${hslRegex.source}|${namedColorRegex.source}`)
 
-export const borderSchema = z.string().refine(
-  (value) => {
-    const parts = value.trim().split(/\s+/)
+export const borderSchema = z.string().refine((value) => {
+  const parts = value.trim().split(/\s+/)
 
-    if (parts.length < 2 || parts.length > 3) return false
+  if (parts.length < 2 || parts.length > 3) return false
 
-    const [width, style, color] = parts
+  const [width, style, color] = parts
 
-    if (width && !borderWidthRegex.test(width)) return false
-    if (style && !borderStyleRegex.test(style)) return false
-    if (color && !colorRegex.test(color)) return false
+  if (width && !borderWidthRegex.test(width)) return false
+  if (style && !borderStyleRegex.test(style)) return false
+  if (color && !colorRegex.test(color)) return false
 
-    return true
-  },
-  {
-    message: "Invalid border. Example: '1px solid #000' or 'medium dashed rgba(0, 0, 0, 0.5)'."
-  }
-)
+  return true
+})
 
 /**
 |--------------------------------------------------
@@ -103,9 +93,7 @@ export const borderSchema = z.string().refine(
 |--------------------------------------------------
 */
 
-export const paddingSchema = z.number().min(0, { message: "Padding value must not be negative." }).max(256, {
-  message: "Padding value must not exceed 256."
-})
+export const paddingSchema = z.number().min(0).max(256)
 
 /**
 |--------------------------------------------------
@@ -113,6 +101,4 @@ export const paddingSchema = z.number().min(0, { message: "Padding value must no
 |--------------------------------------------------
 */
 
-export const radiusSchema = z.number().min(0, { message: "Radius value must not be negative." }).max(36, {
-  message: "Radius value must not exceed 36."
-})
+export const radiusSchema = z.number().min(0).max(36)

@@ -1,4 +1,3 @@
-import type { ZodError } from "zod"
 import Button from "@/components/ui/Button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
@@ -23,15 +22,10 @@ const EditorBorder = () => {
   function validateBorder(border: Border) {
     setInputValue(border.value)
 
-    try {
-      borderSchema.parse(border.value)
-    } catch (error: ZodError<typeof borderSchema> | any) {
-      for (const issue of error.issues) {
-        console.error(`Error: ${issue.code} - ${issue.message} at ${issue.path.join(".")}`)
+    const isValid = borderSchema.safeParse(border.value)
 
-        toast.error(issue.message)
-      }
-
+    if (!isValid.success) {
+      toast.error("Invalid border. Example: '1px solid #000' or 'medium dashed rgba(0, 0, 0, 0.5)'")
       return
     }
 

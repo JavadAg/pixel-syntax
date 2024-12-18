@@ -12,7 +12,7 @@ const CodeLanguage = () => {
   const [open, setOpen] = useState(false)
 
   const activeTabId = useStore((state) => state.activeTabId)
-  const getTab = useStore((state) => state.getTab)
+  const getTab = useStore((state) => state.getTab())
   const updateTab = useStore((state) => state.updateTab)
 
   function handleLanguage(id: string) {
@@ -21,7 +21,7 @@ const CodeLanguage = () => {
     setOpen(false)
   }
 
-  const language = resolveLanguage(getTab().languageId)
+  const language = resolveLanguage(getTab.languageId)
 
   return (
     <SidebarItemWrapper>

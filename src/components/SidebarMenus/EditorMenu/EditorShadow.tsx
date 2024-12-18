@@ -1,4 +1,3 @@
-import type { ZodError } from "zod"
 import Button from "@/components/ui/Button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
@@ -23,15 +22,10 @@ const EditorShadow = () => {
   function validateShadow(shadow: Shadow) {
     setInputValue(shadow.value)
 
-    try {
-      shadowSchema.parse(shadow.value)
-    } catch (error: ZodError<typeof shadowSchema> | any) {
-      for (const issue of error.issues) {
-        console.error(`Error: ${issue.code} - ${issue.message} at ${issue.path.join(".")}`)
+    const isValid = shadowSchema.safeParse(shadow.value)
 
-        toast.error(issue.message)
-      }
-
+    if (!isValid.success) {
+      toast.error("Invalid shadow format. Example: '0px 4px 6px rgba(0, 0, 0, 0.15)'")
       return
     }
 

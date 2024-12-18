@@ -1,4 +1,3 @@
-import type { ZodError } from "zod"
 import Button from "@/components/ui/Button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
@@ -21,15 +20,10 @@ const EditorRadius = () => {
   const [inputValue, setInputValue] = useState(selectedRadius)
 
   function validateBorderRadius(radius: Radius) {
-    try {
-      radiusSchema.parse(radius.value)
-    } catch (error: ZodError<typeof radiusSchema> | any) {
-      for (const issue of error.issues) {
-        console.error(`Error: ${issue.code} - ${issue.message} at ${issue.path.join(".")}`)
+    const isValid = radiusSchema.safeParse(radius.value)
 
-        toast.error(issue.message)
-      }
-
+    if (!isValid.success) {
+      toast.error("Radius must be between 0 and 36")
       return
     }
 

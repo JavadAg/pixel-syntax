@@ -14,7 +14,7 @@ const EditorWrapper = () => {
   const tabs = useStore((state) => state.tabs)
   const updateTab = useStore((state) => state.updateTab)
   const activeTabId = useStore((state) => state.activeTabId)
-  const getTab = useStore((state) => state.getTab)
+  const getTab = useStore((state) => state.getTab())
 
   const theme = resolveTheme(editorConfig.themeId, editorConfig.isTransparent)
 
@@ -95,9 +95,9 @@ const EditorWrapper = () => {
             foldGutter: false
           }}
           className="bg-transparent"
-          value={getTab().content}
+          value={getTab.content}
           theme={createTheme(theme.options)}
-          extensions={[fontFamily(), resolveLanguage(getTab().languageId).syntax()]}
+          extensions={[fontFamily(), resolveLanguage(getTab.languageId).syntax()]}
           onChange={updateTabContent}
         />
       </div>

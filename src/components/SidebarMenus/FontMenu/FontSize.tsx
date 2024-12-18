@@ -11,13 +11,14 @@ const FontSize = () => {
   const setFontSize = useStore((state) => state.setFontSize)
 
   function handleFontSize(fontSize: number) {
-    try {
-      fontSizeSchema.parse(fontSize)
-      setFontSize(fontSize)
-    } catch (error) {
-      console.error(error)
-      toast.error("Failed to set font size, must be between 12 and 24")
+    const isValid = fontSizeSchema.safeParse(fontSize)
+
+    if (!isValid.success) {
+      toast.error("Font size must be between 12 and 24")
+      return
     }
+
+    setFontSize(fontSize)
   }
 
   return (

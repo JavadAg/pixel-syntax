@@ -5,22 +5,25 @@ import { Switch } from "@/components/ui/Switch"
 import { headers } from "@/data/editor-headers"
 import useStore from "@/store/store"
 import { cn, resolveTheme } from "@/utils/helpers"
+import { useMemo } from "react"
 import SidebarItemWrapper from "../SidebarItemWrapper/SidebarItemWrapper"
 
 const EditorHeader = () => {
   const { isHeader, headerId, isTransparent, themeId } = useStore((state) => state.editorConfig)
-  const getTab = useStore((state) => state.getTab)
+  const getTab = useStore((state) => state.getTab())
 
   const setHeader = useStore((state) => state.setHeader)
   const setHeaderId = useStore((state) => state.setHeaderId)
 
-  const tab: TabConfig = {
-    id: Date.now().toString(),
-    name: "Untitled",
-    content: "",
-    languageId: getTab().languageId,
-    extension: getTab().extension
-  }
+  const tab: TabConfig = useMemo(() => {
+    return {
+      id: Date.now().toString(),
+      name: "Untitled",
+      content: "",
+      languageId: getTab.languageId,
+      extension: getTab.extension
+    }
+  }, [getTab.extension, getTab.languageId])
 
   const theme = resolveTheme(themeId, isTransparent)
 

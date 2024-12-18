@@ -1,4 +1,3 @@
-import type { ZodError } from "zod"
 import Button from "@/components/ui/Button"
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/Command"
 import CommandValueInput from "@/components/ui/CommandValueInput"
@@ -20,15 +19,10 @@ const ContainerPadding = () => {
   const [inputValueY, setInputValueY] = useState(paddingY.value)
 
   function handlePadding(padding: Padding, axis: "paddingX" | "paddingY") {
-    try {
-      paddingSchema.parse(padding.value)
-    } catch (error: ZodError<typeof paddingSchema> | any) {
-      for (const issue of error.issues) {
-        console.error(`Error: ${issue.code} - ${issue.message} at ${issue.path.join(".")}`)
+    const isValid = paddingSchema.safeParse(padding.value)
 
-        toast.error(issue.message)
-      }
-
+    if (!isValid.success) {
+      toast.error("Padding must be between 0 and 256")
       return
     }
 

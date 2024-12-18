@@ -35,14 +35,11 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
   )
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    try {
-      const isValid = z.string().min(1).max(20).safeParse(e.target.value)
-      if (isValid.success) {
-        setName(e.target.value)
-        handleNameCallback(tab.id, e.target.value)
-      }
-    } catch (error) {
-      console.error(error)
+    const isValid = z.string().min(1).max(20).safeParse(e.target.value)
+    if (isValid.success) {
+      setName(e.target.value)
+      handleNameCallback(tab.id, e.target.value)
+    } else {
       toast.error("Name must be between 1 and 20 characters")
     }
   }

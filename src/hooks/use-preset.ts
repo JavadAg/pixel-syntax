@@ -96,7 +96,6 @@ export const usePreset = () => {
       preset && setActivePreset(preset)
       toast.success("Preset added")
     } catch (error: any) {
-      console.error(error)
       toast.error(`Failed to add: ${"message" in error ? error.message : String(error)}`)
     }
   }
@@ -122,7 +121,6 @@ export const usePreset = () => {
       setActivePreset(preset!)
       toast.success("Preset updated")
     } catch (error: any) {
-      console.error(error)
       toast.error(`Failed to update: ${"message" in error ? error.message : String(error)}`)
     }
   }
@@ -132,7 +130,6 @@ export const usePreset = () => {
       await db.presets.delete(presetId)
       toast.success("Preset deleted")
     } catch (error: any) {
-      console.error(error)
       toast.error(`Failed to delete: ${"message" in error ? error.message : String(error)}`)
     }
   }

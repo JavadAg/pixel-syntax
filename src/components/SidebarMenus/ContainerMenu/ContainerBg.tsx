@@ -29,8 +29,8 @@ const ContainerBg = () => {
   return (
     <SidebarItemWrapper className="grid-cols-1">
       <Accordion type="single" collapsible>
-        <AccordionItem value="item-1" data-testid="container-bg-trigger">
-          <MenuAccordionTrigger title="Background" style={{ background }} />
+        <AccordionItem value="item-1">
+          <MenuAccordionTrigger data-testid="container-bg-trigger" title="Background" style={{ background }} />
           <AccordionContent
             className="dark:[&_.popup\_tabs-header>.popup\_tabs-header-label-active]:bg-background/60 dark:[&_.popup\_tabs-header>.popup\_tabs-header-label-active]:text-foreground/90 [&_.popup\_tabs-header>div]:h-9 [&_.popup\_tabs-header]:h-9 dark:[&_.popup\_tabs-header]:bg-secondary [&_.popup\_tabs]:!w-full [&_.popup\_tabs]:!shadow-none dark:[&_.popup\_tabs]:!bg-background/60 dark:[&_.popup\_tabs_.color-picker-panel]:!bg-background/60 dark:[&_.popup\_tabs_.colorpicker]:!bg-background/60 [&_.popup\_tabs_.popup\_tabs-body]:!p-2"
             data-testid="container-bg-content"

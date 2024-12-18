@@ -34,13 +34,14 @@ const ExportImage = () => {
   }
 
   function handleName(event: ChangeEvent<HTMLInputElement>) {
-    try {
-      nameSchema.parse(event.target.value)
-      setExportName(event.target.value)
-    } catch (error) {
-      console.error(error)
+    const isValid = nameSchema.safeParse(event.target.value)
+
+    if (!isValid.success) {
       toast.error("Name must be between 1 and 20 characters")
+      return
     }
+
+    setExportName(event.target.value)
   }
 
   const handleExportImage = async (format: ExportExtension) => {
@@ -73,9 +74,8 @@ const ExportImage = () => {
         link.href = dataUrl
         link.click()
         toast.success("Image exported successfully")
-      } catch (error) {
-        console.error("Failed to export image:", error)
-        toast.error("Failed to export image")
+      } catch (error: any) {
+        toast.error(`Failed to export: ${"message" in error ? error.message : String(error)}`)
       }
     }
   }

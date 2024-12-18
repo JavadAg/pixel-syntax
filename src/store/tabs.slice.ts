@@ -41,7 +41,6 @@ export const createTabsSlice: StateCreator<TabsSlice> = (set, get) => ({
 
     // if tab not found (on first render activeTabId is undefined)
     const isNotCorrectId = !activeTabId || activeTabId !== tab?.id
-
     if (isNotCorrectId) {
       const firstTab = tabs[0]!
       tab = firstTab
