@@ -107,7 +107,7 @@ test.describe("ContainerBg Component", () => {
   })
 
   test("should update background on color selection", async () => {
-    const color = accordionContent.locator(".default-color-panel > div:nth-child(2)")
+    const color = accordionContent.locator(".default-color-panel > div:nth-child(5)")
     await color.click()
 
     await page.waitForTimeout(1000)
@@ -116,8 +116,12 @@ test.describe("ContainerBg Component", () => {
     const bgColor = await backgroundPreview.evaluate((el) => getComputedStyle(el).background)
 
     expect(selectedColor).toBe(bgColor)
+  })
 
-    accordionTrigger.click()
+  test.afterEach(async () => {
+    await accordionTrigger.click()
+
+    await expect(accordionContent).toBeHidden()
   })
 })
 
@@ -454,7 +458,7 @@ test.describe("EditorRadius Component", () => {
   test("should show error message when invalid border value is entered", async () => {
     await inputField.fill("37")
     await inputField.blur()
-    const errorToast = page.getByText("Radius value must not exceed 36.")
+    const errorToast = page.getByText("Invalid border.")
 
     await expect(errorToast).toBeVisible()
   })
@@ -684,5 +688,78 @@ test.describe("FontLineHeight Component", () => {
     const expectedLineHeight = `${fontSize * 1.8}px`
 
     await expect(codeEditor).toHaveCSS("line-height", expectedLineHeight)
+  })
+})
+
+/**
+|--------------------------------------------------
+| Other Controls
+|--------------------------------------------------
+*/
+
+test.describe("Watermark Component", () => {
+  let watermarkSwitch: Locator
+  let watermarkLocationTrigger: Locator
+  let watermarkLocationContent: Locator
+  let watermarkOpacitySlider: Locator
+  let watermarkOpacityInput: Locator
+  let watermarkEditor: Locator
+  let watermarkContainer: Locator
+
+  test.beforeEach(async () => {
+    watermarkSwitch = page.locator('[data-testid="watermark-switch"]')
+    watermarkLocationTrigger = page.locator('[data-testid="watermark-place-select"]')
+    watermarkLocationContent = page.locator('[data-testid="watermark-place-select-content"]')
+    watermarkOpacitySlider = page.locator('[data-testid="watermark-opacity-slider"]').getByRole("slider")
+    watermarkOpacityInput = page.locator('[data-testid="watermark-input"]')
+    watermarkEditor = page.locator('[data-testid="editor-watermark"]')
+    watermarkContainer = page.locator('[data-testid="container-watermark"]')
+
+    await expect(watermarkSwitch).toBeVisible()
+  })
+
+  test("should update watermark when a new value is selected", async () => {
+    await expect(watermarkLocationTrigger).toBeVisible()
+    await expect(watermarkLocationTrigger).toContainText("Container")
+
+    watermarkLocationTrigger.click()
+
+    await expect(watermarkLocationContent).toBeVisible()
+
+    const watermarkOption = watermarkLocationContent.locator('text="Editor"')
+
+    await watermarkOption.click()
+
+    await expect(watermarkEditor).toBeVisible()
+    await expect(watermarkLocationTrigger).toContainText("Editor")
+    await expect(watermarkContainer).toBeHidden()
+
+    watermarkLocationTrigger.click()
+
+    const watermarkOptionContainer = watermarkLocationContent.locator('text="Container"')
+
+    await watermarkOptionContainer.click()
+  })
+
+  test("should update watermark opacity when slider is moved", async () => {
+    await expect(watermarkContainer).toHaveCSS("opacity", "1")
+    await expect(watermarkOpacitySlider).toBeVisible()
+    await expect(watermarkOpacitySlider).toHaveAttribute("aria-valuenow", "100")
+
+    await watermarkOpacitySlider.click()
+    await watermarkOpacitySlider.press("Shift+ArrowLeft")
+
+    await expect(watermarkOpacitySlider).toHaveAttribute("aria-valuenow", "90")
+    await expect(watermarkContainer).toHaveCSS("opacity", "0.9")
+  })
+
+  test("should update watermark opacity when input is changed", async () => {
+    await expect(watermarkOpacityInput).toBeVisible()
+    await expect(watermarkOpacityInput).toHaveValue("Pixel Syntax")
+
+    await watermarkOpacityInput.fill("Test")
+
+    await expect(watermarkOpacityInput).toHaveValue("Test")
+    await expect(watermarkContainer).toContainText("Test")
   })
 })
