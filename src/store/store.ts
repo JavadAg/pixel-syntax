@@ -14,7 +14,14 @@ const useStore = create<EditorConfigSlice & EditorSlice & ExportSlice & TabsSlic
       ...createTabsSlice(...a)
     }),
     {
+      version: 1,
       name: "pixel-syntax",
+      merge: (persistedState, currentState) => {
+        if (!persistedState) {
+          return { ...currentState }
+        }
+        return { ...currentState, ...persistedState }
+      },
       partialize: (state) => ({
         tabs: state.tabs,
         editorConfig: state.editorConfig

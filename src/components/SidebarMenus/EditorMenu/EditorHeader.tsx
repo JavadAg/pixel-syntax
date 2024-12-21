@@ -1,4 +1,4 @@
-import type { TabConfig } from "@/types/editor.type"
+import type { TabConfig } from "@/types/tabs.type"
 import EditorTab from "@/components/EditorHeaders/EditorTab/EditorTab"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/Accordion"
 import { Switch } from "@/components/ui/Switch"
@@ -19,6 +19,12 @@ const EditorHeader = () => {
     return {
       id: Date.now().toString(),
       name: "Untitled",
+      decorations: {
+        highlighted: [],
+        added: [],
+        removed: [],
+        focused: []
+      },
       content: "",
       languageId: getTab.languageId,
       extension: getTab.extension

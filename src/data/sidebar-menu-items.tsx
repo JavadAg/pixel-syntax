@@ -1,3 +1,4 @@
+import CodeDecoration from "@/components/SidebarMenus/CodeMenu/CodeDecoration"
 import CodeLanguage from "@/components/SidebarMenus/CodeMenu/CodeLanguage"
 import CodeLineNumber from "@/components/SidebarMenus/CodeMenu/CodeLineNumber"
 import CodeTheme from "@/components/SidebarMenus/CodeMenu/CodeTheme"
@@ -88,6 +89,10 @@ export const sidebar_menu_list: SidebarMenuListItem[] = [
       {
         label: "Line Number",
         component: <CodeLineNumber />
+      },
+      {
+        label: "Decorations",
+        component: <CodeDecoration />
       }
     ]
   },

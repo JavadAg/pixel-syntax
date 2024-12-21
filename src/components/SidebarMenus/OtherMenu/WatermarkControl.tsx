@@ -7,15 +7,23 @@ import { toast } from "sonner"
 import SidebarItemWrapper from "../SidebarItemWrapper/SidebarItemWrapper"
 
 const WatermarkControl = () => {
-  const { isWatermark, watermarkText, watermarkOpacity, watermarkLocation } = useStore((state) => state.editorConfig)
+  const { isWatermark, watermarkControls } = useStore((state) => state.editorConfig)
   const setWatermark = useStore((state) => state.setWatermark)
-  const setWatermarkText = useStore((state) => state.setWatermarkText)
-  const setWatermarkOpacity = useStore((state) => state.setWatermarkOpacity)
-  const setWatermarkLocation = useStore((state) => state.setWatermarkLocation)
+  const setWatermarkControls = useStore((state) => state.setWatermarkControls)
 
-  function handleWatermark(value: string) {
-    if (value.length <= 40) setWatermarkText(value)
-    else toast.error("Watermark must be less than 40 characters")
+  function handleWatermarkControls(type: "location" | "opacity" | "text", value: string) {
+    switch (type) {
+      case "location":
+        setWatermarkControls({ ...watermarkControls, location: value as "container" | "editor" })
+        break
+      case "opacity":
+        setWatermarkControls({ ...watermarkControls, opacity: Number(value) })
+        break
+      case "text": {
+        if (value.length <= 40) setWatermarkControls({ ...watermarkControls, text: value })
+        else toast.error("Watermark must be less than 40 characters")
+      }
+    }
   }
 
   return (
@@ -28,7 +36,7 @@ const WatermarkControl = () => {
       {isWatermark && (
         <>
           <span>Location</span>
-          <Select value={watermarkLocation} onValueChange={setWatermarkLocation}>
+          <Select value={watermarkControls.location} onValueChange={(val) => handleWatermarkControls("location", val)}>
             <SelectTrigger data-testid="watermark-place-select" className="max-h-8">
               <SelectValue placeholder="Place" />
             </SelectTrigger>
@@ -41,18 +49,18 @@ const WatermarkControl = () => {
           <span>Opacity</span>
           <Slider
             data-testid="watermark-opacity-slider"
-            value={[watermarkOpacity]}
+            value={[watermarkControls.opacity]}
             max={100}
             min={-1}
             step={1}
-            onValueChange={(val) => val[0] && setWatermarkOpacity(val[0])}
+            onValueChange={(val) => val[0] && handleWatermarkControls("opacity", String(val[0]))}
           />
 
           <span>Content</span>
           <Input
             data-testid="watermark-input"
-            value={watermarkText}
-            onChange={(e) => handleWatermark(e.target.value)}
+            value={watermarkControls.text}
+            onChange={(e) => handleWatermarkControls("text", e.target.value)}
             placeholder="Watermark"
           />
         </>

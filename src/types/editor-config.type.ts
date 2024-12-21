@@ -26,7 +26,9 @@ export type EditorConfig = {
   lineHeight: string
   isLigatures: boolean
   isWatermark: boolean
-  watermarkLocation: "container" | "editor"
-  watermarkOpacity: number
-  watermarkText: string
+  watermarkControls: {
+    location: "container" | "editor"
+    opacity: number
+    text: string
+  }
 }

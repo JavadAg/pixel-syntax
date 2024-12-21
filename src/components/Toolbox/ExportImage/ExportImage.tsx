@@ -10,12 +10,12 @@ import { ArrowDownToLine, Settings2 } from "lucide-react"
 import { type ChangeEvent, Fragment } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
-import ToolboxItemWrapper from "./ToolboxItemWrapper/ToolboxItemWrapper"
+import ExportConfigWrapper from "./ExportConfigWrapper/ExportConfigWrapper"
 
 const nameSchema = z.string().min(1).max(20)
 
 const ExportImage = () => {
-  const editorRef = useStore((state) => state.editorRef)
+  const editorContainerRef = useStore((state) => state.editorContainerRef)
 
   const { exportExtension, exportExtensionOptions, exportName, exportScale } = useStore((state) => state.exportConfig)
   const setExportScale = useStore((state) => state.setExportScale)
@@ -60,9 +60,9 @@ const ExportImage = () => {
       return true
     }
 
-    if (editorRef) {
+    if (editorContainerRef) {
       try {
-        const dataUrl = await domtoimage[value](editorRef, {
+        const dataUrl = await domtoimage[value](editorContainerRef, {
           copyDefaultStyles: false,
           scale: exportScale.value,
           filter,
@@ -107,11 +107,11 @@ const ExportImage = () => {
           sideOffset={10}
           className="w-full min-w-32 space-y-4"
         >
-          <ToolboxItemWrapper title="Name">
+          <ExportConfigWrapper title="Name">
             <Input value={exportName} onChange={handleName} type="text" className="h-9" />
-          </ToolboxItemWrapper>
+          </ExportConfigWrapper>
 
-          <ToolboxItemWrapper title="Extension">
+          <ExportConfigWrapper title="Extension">
             <ToggleGroup
               data-testid="export-image-extension"
               value={exportExtension.value}
@@ -125,7 +125,7 @@ const ExportImage = () => {
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
-          </ToolboxItemWrapper>
+          </ExportConfigWrapper>
           {exportExtension.options && (
             <div className="!mt-2 flex flex-col gap-2">
               {exportExtension.options.map((option) => {
@@ -135,7 +135,7 @@ const ExportImage = () => {
             </div>
           )}
 
-          <ToolboxItemWrapper title="Scale">
+          <ExportConfigWrapper title="Scale">
             <ToggleGroup
               data-testid="export-image-scale"
               value={exportScale.value.toString()}
@@ -149,7 +149,7 @@ const ExportImage = () => {
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
-          </ToolboxItemWrapper>
+          </ExportConfigWrapper>
         </PopoverContent>
       </Popover>
       <Button

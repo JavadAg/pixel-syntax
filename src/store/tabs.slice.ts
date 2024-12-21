@@ -1,4 +1,4 @@
-import type { TabConfig } from "@/types/editor.type"
+import type { DecorationType, TabConfig } from "@/types/tabs.type"
 import type { StateCreator } from "zustand"
 import { languages } from "@/data/language-configs"
 
@@ -7,6 +7,12 @@ const javascript = languages.find((lang) => lang.id === "javascript")
 const initialData: TabConfig = {
   id: Date.now().toString(),
   name: `Untitled${javascript!.extensions[0]!.extension}`,
+  decorations: {
+    highlighted: [],
+    added: [],
+    removed: [],
+    focused: []
+  },
   content: `const IntervalCounter = () => {
 const [count, setCount] = useState(0);
 
@@ -24,16 +30,19 @@ return <h1>Counter: {count}</h1>;
 
 export type TabsSlice = {
   tabs: TabConfig[]
+  activeDecor: DecorationType | null
   activeTabId: string
   getTab: () => TabConfig
   addTab: () => void
   changeTab: (tabId: string) => void
   removeTab: (tabId: string) => void
   updateTab: (tabId: string, update: Partial<TabConfig>) => void
+  setActiveDecor: (decorType: DecorationType | null) => void
 }
 
 export const createTabsSlice: StateCreator<TabsSlice> = (set, get) => ({
   tabs: [initialData],
+  activeDecor: null,
   activeTabId: get()?.tabs[0]!.id,
   getTab: () => {
     const { tabs, activeTabId } = get()
@@ -69,5 +78,6 @@ export const createTabsSlice: StateCreator<TabsSlice> = (set, get) => ({
     }))
   },
   updateTab: (tabId, update) =>
-    set((state) => ({ tabs: state.tabs.map((tab) => (tab.id === tabId ? { ...tab, ...update } : tab)) }))
+    set((state) => ({ tabs: state.tabs.map((tab) => (tab.id === tabId ? { ...tab, ...update } : tab)) })),
+  setActiveDecor: (decorType) => set(() => ({ activeDecor: decorType }))
 })

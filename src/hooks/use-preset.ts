@@ -42,9 +42,7 @@ export const usePreset = () => {
     lineHeight: editorConfig.lineHeight,
     isLigatures: editorConfig.isLigatures,
     isWatermark: editorConfig.isWatermark,
-    watermarkLocation: editorConfig.watermarkLocation,
-    watermarkOpacity: editorConfig.watermarkOpacity,
-    watermarkText: editorConfig.watermarkText
+    watermarkControls: editorConfig.watermarkControls
   }
 
   function generateConfig(preset: Preset): EditorConfig {
@@ -77,9 +75,7 @@ export const usePreset = () => {
       lineHeight: configs.lineHeight,
       isLigatures: configs.isLigatures,
       isWatermark: configs.isWatermark || true,
-      watermarkLocation: configs.watermarkLocation || "container",
-      watermarkOpacity: configs.watermarkOpacity || 100,
-      watermarkText: configs.watermarkText || "Pixel Syntax"
+      watermarkControls: configs.watermarkControls
     }
   }
 

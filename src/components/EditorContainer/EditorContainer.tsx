@@ -7,7 +7,7 @@ import Watermark from "./Watermark/Watermark"
 
 const EditorContainer = () => {
   const editorConfig = useStore((state) => state.editorConfig)
-  const setEditorRef = useStore((state) => state.setEditorRef)
+  const setEditorContainerRef = useStore((state) => state.setEditorContainerRef)
 
   return (
     <Resizable
@@ -26,7 +26,7 @@ const EditorContainer = () => {
     >
       <div
         data-testid="container-wrapper"
-        ref={setEditorRef}
+        ref={setEditorContainerRef}
         className="relative flex w-full items-center justify-center bg-transparent"
         style={{
           padding: `${editorConfig.paddingY.value}px ${editorConfig.paddingX.value}px`,
@@ -44,7 +44,7 @@ const EditorContainer = () => {
             opacity: editorConfig.opacity / 100
           }}
         />
-        {editorConfig.isWatermark && editorConfig.watermarkLocation === "container" && <Watermark />}
+        {editorConfig.isWatermark && editorConfig.watermarkControls.location === "container" && <Watermark />}
         <EditorWrapper />
       </div>
     </Resizable>

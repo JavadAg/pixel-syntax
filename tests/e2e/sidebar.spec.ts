@@ -458,7 +458,7 @@ test.describe("EditorRadius Component", () => {
   test("should show error message when invalid border value is entered", async () => {
     await inputField.fill("37")
     await inputField.blur()
-    const errorToast = page.getByText("Invalid border.")
+    const errorToast = page.getByText("Radius must be")
 
     await expect(errorToast).toBeVisible()
   })
@@ -553,6 +553,119 @@ test.describe("CodeLineNumber Component", () => {
 
     await expect(editorNumbers).toBeHidden()
     await expect(switchButton).not.toBeChecked()
+  })
+})
+
+test.describe("CodeDecoration Component", () => {
+  let trigger: Locator
+  let content: Locator
+  let editor: Locator
+  let lines: Locator
+  let lineNumbers: Locator
+
+  test.beforeEach(async () => {
+    trigger = page.locator('[data-testid="code-decoration-trigger"]')
+    content = page.locator('[data-testid="code-decoration-content"]')
+    editor = page.locator('[data-testid="editor"]')
+    lines = editor.locator(".cm-line")
+    lineNumbers = editor.locator(".cm-gutterElement")
+
+    await expect(trigger).toBeVisible()
+
+    const isPopoverVisible = await content.isVisible()
+
+    if (!isPopoverVisible) {
+      await trigger.click()
+    }
+  })
+
+  test("should select highlighted decoration and apply active styles", async () => {
+    const highlighted = content.getByRole("radio", { name: "Highlighted" })
+    await highlighted.click()
+
+    await expect(highlighted).toHaveAttribute("aria-checked", "true")
+
+    const line = lines.nth(6)
+    const lineNumber = lineNumbers.nth(6).locator("div")
+
+    await expect(line).not.toHaveClass("decor-highlighted")
+    await expect(lineNumber).not.toHaveClass("decor-highlighted")
+
+    await line.click()
+
+    await expect(line).toHaveClass(/.*decor-highlighted.*/)
+    await expect(lineNumber).toHaveClass(/.*decor-highlighted.*/)
+  })
+
+  test("should select added decoration and apply active styles", async () => {
+    const added = content.getByRole("radio", { name: "Added" })
+    await added.click()
+
+    await expect(added).toHaveAttribute("aria-checked", "true")
+
+    const line = lines.nth(4)
+    const lineNumber = lineNumbers.nth(4).locator("div")
+
+    await expect(line).not.toHaveClass("decor-added")
+    await expect(lineNumber).not.toHaveClass("decor-added")
+
+    await line.click()
+
+    await expect(line).toHaveClass(/.*decor-added.*/)
+    await expect(lineNumber).toHaveClass(/.*decor-added.*/)
+  })
+
+  test("should select removed decoration and apply active styles", async () => {
+    const removed = content.getByRole("radio", { name: "Removed" })
+    await removed.click()
+
+    await expect(removed).toHaveAttribute("aria-checked", "true")
+
+    const line = lines.nth(5)
+    const lineNumber = lineNumbers.nth(5).locator("div")
+
+    await expect(line).not.toHaveClass("decor-removed")
+    await expect(lineNumber).not.toHaveClass("decor-removed")
+
+    await line.click()
+
+    await expect(line).toHaveClass(/.*decor-removed.*/)
+    await expect(lineNumber).toHaveClass(/.*decor-removed.*/)
+  })
+
+  test("should select focused decoration and apply active styles", async () => {
+    const focused = content.getByRole("radio", { name: "Focused" })
+    await focused.click()
+
+    await expect(focused).toHaveAttribute("aria-checked", "true")
+
+    const line = lines.nth(3)
+    const lineNumber = lineNumbers.nth(3).locator("div")
+
+    await expect(line).not.toHaveClass("decor-focused")
+    await expect(lineNumber).not.toHaveClass("decor-focused")
+
+    await line.click()
+
+    await expect(line).toHaveClass(/.*decor-focused.*/)
+    await expect(lineNumber).toHaveClass(/.*decor-focused.*/)
+  })
+
+  test("should remove all decorations", async () => {
+    const clear = content.getByRole("radio", { name: "Clear" })
+    await clear.click()
+
+    const line = lines.nth(5)
+    const lineNumber = lineNumbers.nth(5).locator("div")
+
+    await expect(line).not.toHaveClass("decor-highlighted")
+    await expect(line).not.toHaveClass("decor-added")
+    await expect(line).not.toHaveClass("decor-removed")
+    await expect(line).not.toHaveClass("decor-focused")
+    await expect(lineNumber).not.toHaveClass("decor-highlighted")
+    await expect(lineNumber).not.toHaveClass("decor-added")
+    await expect(lineNumber).not.toHaveClass("decor-removed")
+    await expect(lineNumber).not.toHaveClass("decor-focused")
   })
 })
 

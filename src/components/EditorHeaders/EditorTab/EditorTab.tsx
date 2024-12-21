@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 
-import type { TabConfig } from "@/types/editor.type"
+import type { TabConfig } from "@/types/tabs.type"
 import AutoResizingInput from "@/components/ui/AutoResizingInput"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown"
 import { type Language, languages } from "@/data/language-configs"

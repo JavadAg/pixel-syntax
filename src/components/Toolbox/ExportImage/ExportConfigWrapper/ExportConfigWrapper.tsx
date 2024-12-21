@@ -1,6 +1,4 @@
-import React from "react"
-
-const ToolboxItemWrapper = ({ children, title }: { children: React.ReactNode; title: string }) => {
+const ExportConfigWrapper = ({ children, title }: { children: React.ReactNode; title: string }) => {
   return (
     <div className="flex select-none flex-col items-start justify-center gap-1">
       <span className="font-semibold">{title}</span>
@@ -9,4 +7,4 @@ const ToolboxItemWrapper = ({ children, title }: { children: React.ReactNode; ti
   )
 }
 
-export default ToolboxItemWrapper
+export default ExportConfigWrapper

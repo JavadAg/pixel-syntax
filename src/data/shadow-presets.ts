@@ -31,7 +31,7 @@ export const shadows: Shadow[] = [
   {
     name: "Inner",
     value:
-      "0px 0px 0px 1px rgb(4, 4, 4), 0px 0px 0px 1px inset rgba(255, 255, 255, 0.5), 0px 0px 18px 1px rgba(0, 0, 0, 0.6)"
+      "0 0 0 1px rgba(0, 0, 0, .9), inset 0 0 0 1.5px rgba(255, 255, 255, 0.5), 0px 0px 18px 1px rgba(0, 0, 0, 0.6)"
   },
   {
     name: "Deep",

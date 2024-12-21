@@ -29,9 +29,11 @@ export const initialState: EditorConfig = {
   lineHeight: "1.5",
   isLigatures: true,
   isWatermark: true,
-  watermarkLocation: "container",
-  watermarkOpacity: 100,
-  watermarkText: "Pixel Syntax"
+  watermarkControls: {
+    location: "container",
+    opacity: 100,
+    text: "Pixel Syntax"
+  }
 }
 
 export type EditorConfigSlice = {
@@ -56,9 +58,7 @@ export type EditorConfigSlice = {
   setLineHeight: (payload: EditorConfig["lineHeight"]) => void
   setLigatures: (payload: EditorConfig["isLigatures"]) => void
   setWatermark: (payload: EditorConfig["isWatermark"]) => void
-  setWatermarkLocation: (payload: EditorConfig["watermarkLocation"]) => void
-  setWatermarkOpacity: (payload: EditorConfig["watermarkOpacity"]) => void
-  setWatermarkText: (payload: EditorConfig["watermarkText"]) => void
+  setWatermarkControls: (payload: EditorConfig["watermarkControls"]) => void
 }
 
 export const createEditorConfigSlice: StateCreator<EditorConfigSlice> = (set) => ({
@@ -197,25 +197,11 @@ export const createEditorConfigSlice: StateCreator<EditorConfigSlice> = (set) =>
         isWatermark: payload
       }
     })),
-  setWatermarkLocation: (payload) =>
+  setWatermarkControls: (payload) =>
     set((state) => ({
       editorConfig: {
         ...state.editorConfig,
-        watermarkLocation: payload
-      }
-    })),
-  setWatermarkOpacity: (payload) =>
-    set((state) => ({
-      editorConfig: {
-        ...state.editorConfig,
-        watermarkOpacity: payload
-      }
-    })),
-  setWatermarkText: (payload) =>
-    set((state) => ({
-      editorConfig: {
-        ...state.editorConfig,
-        watermarkText: payload
+        watermarkControls: payload
       }
     }))
 })

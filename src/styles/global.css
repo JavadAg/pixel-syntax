@@ -391,6 +391,39 @@
   outline: none !important;
 }
 
+.cm-editor[data-focused-line="true"] .cm-line,
+.cm-editor[data-focused-line="true"] .gutter-default {
+  transition: all 0.2s ease-in-out;
+  opacity: 0.5;
+  filter: blur(1px);
+}
+
+.cm-editor[data-focused-line="true"] .decor-focused {
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+  filter: none;
+}
+
+.gutter-default {
+  @apply px-1 text-center mx-auto h-full;
+}
+
+.decor-added {
+  @apply bg-green-700/40 duration-200;
+}
+
+.decor-removed {
+  @apply bg-red-700/40 duration-200;
+}
+
+.decor-highlighted {
+  @apply bg-gray-600/40 duration-200;
+}
+
+.pointer-line:hover {
+  cursor: pointer;
+}
+
 .cm-focused {
   outline: none !important;
 }
