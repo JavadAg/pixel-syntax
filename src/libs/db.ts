@@ -15,6 +15,8 @@ db.version(3)
     for (const preset of presets) {
       preset.configs = {
         ...preset.configs,
+        themeId: preset.configs.theme || 1,
+        isWatermark: true,
         watermarkControls: preset.configs.watermarkControls || {
           location: "container",
           opacity: 100,
