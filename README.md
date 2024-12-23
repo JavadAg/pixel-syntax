@@ -39,7 +39,6 @@ npm run dev
 - ✒️ **CodeMirror**: Integrated editor with rich syntax highlighting.
 - 🌐 **Shadcn/ui**: Accessible and customizable UI components.
 - 💾 **Dexie.js**: Fast, reliable IndexedDB-based storage for managing presets.
-- 🖼 **HTML-to-Image**: Seamlessly convert visuals into downloadable image files.
 
 ## 🤝 Contributing
 
