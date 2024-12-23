@@ -553,6 +553,8 @@ test.describe("CodeLineNumber Component", () => {
 
     await expect(editorNumbers).toBeHidden()
     await expect(switchButton).not.toBeChecked()
+
+    await switchButton.click()
   })
 })
 

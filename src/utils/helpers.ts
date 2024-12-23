@@ -51,7 +51,7 @@ export const resolveHeader = (id: EditorHeader["id"]): EditorHeader => {
   return headers.find((header) => header.id === id)!
 }
 
-export const resolveLanguage = (id: string): Language => {
+export const resolveLanguage = (id: Language["id"]) => {
   return languages.find((lang) => lang.id === id)!
 }
 

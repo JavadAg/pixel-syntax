@@ -5,7 +5,7 @@ const db = new Dexie("syntax-presets-db") as Dexie & {
   presets: EntityTable<Preset, "id">
 }
 
-db.version(4)
+db.version(5)
   .stores({
     presets: "++id, name, updatedAt, createdAt, configs",
     appState: "&key"
@@ -15,7 +15,7 @@ db.version(4)
     for (const preset of presets) {
       preset.configs = {
         ...preset.configs,
-        themeId: preset.configs.theme || 1,
+        themeId: preset.configs.theme || "dracula",
         isWatermark: true,
         watermarkControls: preset.configs.watermarkControls || {
           location: "container",

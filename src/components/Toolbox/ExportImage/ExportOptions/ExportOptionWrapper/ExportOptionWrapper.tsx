@@ -1,4 +1,4 @@
-const ExportConfigWrapper = ({ children, title }: { children: React.ReactNode; title: string }) => {
+const ExportOptionWrapper = ({ children, title }: { children: React.ReactNode; title: string }) => {
   return (
     <div className="flex select-none flex-col items-start justify-center gap-1">
       <span className="font-semibold">{title}</span>
@@ -7,4 +7,4 @@ const ExportConfigWrapper = ({ children, title }: { children: React.ReactNode; t
   )
 }
 
-export default ExportConfigWrapper
+export default ExportOptionWrapper

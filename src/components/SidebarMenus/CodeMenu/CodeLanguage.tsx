@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button"
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/Command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
-import { languageNames } from "@/data/language-configs"
+import { type Language, languageNames } from "@/data/language-configs"
 import useStore from "@/store/store"
 import { cn, resolveLanguage } from "@/utils/helpers"
 import { Check, ChevronDown } from "lucide-react"
@@ -12,16 +12,19 @@ const CodeLanguage = () => {
   const [open, setOpen] = useState(false)
 
   const activeTabId = useStore((state) => state.activeTabId)
-  const getTab = useStore((state) => state.getTab())
+  const currentTab = useStore((state) => state.getTab())
   const updateTab = useStore((state) => state.updateTab)
 
-  function handleLanguage(id: string) {
+  function handleLanguage(id: Language["id"]) {
     const selectedLang = resolveLanguage(id)
-    updateTab(activeTabId, { languageId: selectedLang.id, extension: selectedLang.extensions[0]! })
+
+    if (selectedLang) {
+      updateTab(activeTabId, { languageId: selectedLang.id, extension: selectedLang.extensions[0]! })
+    }
     setOpen(false)
   }
 
-  const language = resolveLanguage(getTab.languageId)
+  const language = resolveLanguage(currentTab.languageId)
 
   return (
     <SidebarItemWrapper>
@@ -35,7 +38,7 @@ const CodeLanguage = () => {
             aria-expanded={open}
             className="max-h-8 justify-between"
           >
-            {language.name || "Select language..."}
+            {language?.name || "Select language..."}
             <ChevronDown className="ml-auto mr-0 size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
           </Button>
         </PopoverTrigger>

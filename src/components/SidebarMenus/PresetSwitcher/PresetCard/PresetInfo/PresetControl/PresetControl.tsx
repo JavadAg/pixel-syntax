@@ -25,7 +25,10 @@ const PresetControl: React.FC<IProps> = ({ presetId }) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => updatePreset(presetId)}
+          onClick={(e) => {
+            e.stopPropagation()
+            updatePreset(presetId)
+          }}
           type="button"
           className="w-full justify-start"
         >
@@ -35,7 +38,10 @@ const PresetControl: React.FC<IProps> = ({ presetId }) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => deletePreset(presetId)}
+          onClick={(e) => {
+            e.stopPropagation()
+            deletePreset(presetId)
+          }}
           type="button"
           className="w-full justify-start hover:bg-destructive"
         >

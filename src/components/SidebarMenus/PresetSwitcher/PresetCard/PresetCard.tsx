@@ -65,7 +65,7 @@ const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
             inset: "0px",
             borderRadius: editorConfig.radius.value,
             background: editorConfig.background,
-            opacity: editorConfig.opacity
+            opacity: editorConfig.opacity / 100
           }}
         />
         <div

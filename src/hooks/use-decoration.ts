@@ -13,7 +13,7 @@ import { useEffect } from "react"
 
 export const useDecoration = () => {
   const editorRef = useStore((state) => state.editorRef)
-  const getTab = useStore((state) => state.getTab())
+  const currentTab = useStore((state) => state.getTab())
   const isLineNumber = useStore((state) => state.editorConfig.isLineNumber)
   const updateTab = useStore((state) => state.updateTab)
   const decorType = useStore((state) => state.activeDecor)
@@ -27,7 +27,7 @@ export const useDecoration = () => {
     if (!editor) return
 
     const handleMouseDown = (event: MouseEvent) => {
-      const decoration = getTab?.decorations?.[decorType] || []
+      const decoration = currentTab.decorations?.[decorType] || []
 
       const coords = { x: event.clientX, y: event.clientY }
       const pos = editor.posAtCoords(coords)
@@ -35,8 +35,6 @@ export const useDecoration = () => {
 
       const line = editor.state.doc.lineAt(pos)
       const isExist = decoration.includes(line.number)
-
-      const currentTab = getTab
 
       updateTab(currentTab.id, {
         decorations: {
@@ -52,7 +50,7 @@ export const useDecoration = () => {
       editor.dom.removeEventListener("mousedown", handleMouseDown)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [decorType, getTab])
+  }, [decorType, currentTab])
 
   const addLineHighlightEffect = StateEffect.define<{
     from: number
@@ -63,7 +61,7 @@ export const useDecoration = () => {
   // handle adding decorations to editor
   useEffect(() => {
     const editor = editorRef?.view
-    const decorations = getTab?.decorations
+    const decorations = currentTab?.decorations
 
     if (!decorations || !editor) return
 
@@ -92,11 +90,11 @@ export const useDecoration = () => {
     if (effects.length > 0) {
       editor.dispatch({ effects })
     }
-  }, [getTab, editorRef, addLineHighlightEffect])
+  }, [currentTab, editorRef, addLineHighlightEffect])
 
   function handleDecorTypeChange(value: DecorationType | "clear") {
     if (value === "clear") {
-      updateTab(getTab.id, {
+      updateTab(currentTab.id, {
         decorations: {
           highlighted: [],
           added: [],
@@ -131,7 +129,7 @@ export const useDecoration = () => {
     ? gutter({
         lineMarker: (view, line) => {
           const lineNumber = view.state.doc.lineAt(line.from).number
-          const decorations = getTab.decorations
+          const decorations = currentTab.decorations
           if (decorations) {
             const classNames = ["gutter-default"]
             if (decorations.added?.includes(lineNumber)) classNames.push("decor-added  text-white")

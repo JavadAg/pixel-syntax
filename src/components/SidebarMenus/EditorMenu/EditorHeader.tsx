@@ -1,4 +1,3 @@
-import type { TabConfig } from "@/types/tabs.type"
 import EditorTab from "@/components/EditorHeaders/EditorTab/EditorTab"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/Accordion"
 import { Switch } from "@/components/ui/Switch"
@@ -10,12 +9,12 @@ import SidebarItemWrapper from "../SidebarItemWrapper/SidebarItemWrapper"
 
 const EditorHeader = () => {
   const { isHeader, headerId, isTransparent, themeId } = useStore((state) => state.editorConfig)
-  const getTab = useStore((state) => state.getTab())
+  const currentTab = useStore((state) => state.getTab())
 
   const setHeader = useStore((state) => state.setHeader)
   const setHeaderId = useStore((state) => state.setHeaderId)
 
-  const tab: TabConfig = useMemo(() => {
+  const demoTab = useMemo(() => {
     return {
       id: Date.now().toString(),
       name: "Untitled",
@@ -26,10 +25,10 @@ const EditorHeader = () => {
         focused: []
       },
       content: "",
-      languageId: getTab.languageId,
-      extension: getTab.extension
+      languageId: currentTab.languageId,
+      extension: currentTab.extension
     }
-  }, [getTab.extension, getTab.languageId])
+  }, [currentTab])
 
   const theme = resolveTheme(themeId, isTransparent)
 
@@ -71,7 +70,7 @@ const EditorHeader = () => {
                   onClick={() => setHeaderId(item.id)}
                   key={item.name}
                 >
-                  {item.component(<EditorTab tab={tab} />)}
+                  {item.component(<EditorTab tab={demoTab} />)}
                 </button>
               ))}
             </AccordionContent>

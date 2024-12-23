@@ -15,7 +15,7 @@ const Editor: React.FC<IProps> = ({ theme }) => {
   const editorConfig = useStore((state) => state.editorConfig)
   const updateTab = useStore((state) => state.updateTab)
   const activeTabId = useStore((state) => state.activeTabId)
-  const getTab = useStore((state) => state.getTab())
+  const currentTab = useStore((state) => state.getTab())
   const decorType = useStore((state) => state.activeDecor)
 
   const { gutterExtension, lineHighlightExtension } = useDecoration()
@@ -56,6 +56,13 @@ const Editor: React.FC<IProps> = ({ theme }) => {
     foldGutter: false
   }
 
+  const extensions = [
+    fontFamily(),
+    resolveLanguage(currentTab.languageId)!.syntax(),
+    lineHighlightExtension,
+    gutterExtension
+  ]
+
   return (
     <div className="w-full bg-transparent px-3 py-4">
       <CodeMirror
@@ -63,14 +70,9 @@ const Editor: React.FC<IProps> = ({ theme }) => {
         data-testid="editor"
         basicSetup={basicSetup}
         className={cn("bg-transparent", decorType && "cursor-pointer")}
-        value={getTab.content}
+        value={currentTab?.content}
         theme={createTheme(theme.options)}
-        extensions={[
-          fontFamily(),
-          resolveLanguage(getTab.languageId).syntax(),
-          lineHighlightExtension,
-          gutterExtension
-        ]}
+        extensions={extensions}
         onChange={updateTabContent}
       />
     </div>

@@ -5,7 +5,7 @@ import { languages } from "@/data/language-configs"
 const javascript = languages.find((lang) => lang.id === "javascript")
 
 const initialData: TabConfig = {
-  id: Date.now().toString(),
+  id: "initialTab",
   name: `Untitled${javascript!.extensions[0]!.extension}`,
   decorations: {
     highlighted: [],
@@ -13,16 +13,25 @@ const initialData: TabConfig = {
     removed: [],
     focused: []
   },
-  content: `const IntervalCounter = () => {
-const [count, setCount] = useState(0);
+  content: `import React, { useState, useEffect } from "react";
 
-useEffect(() => {
-const interval = setInterval(() => setCount((c) => c + 1), 1000);
-return () => clearInterval(interval);
-}, []);
+const CountdownTimer = ({ start }) => {
+  const [timeLeft, setTimeLeft] = useState(start);
 
-return <h1>Counter: {count}</h1>;
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((time) => time - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  return <h1>{timeLeft > 0 ? timeLeft : "Time's up!"}</h1>;
 };
+
+export default CountdownTimer;
 `,
   languageId: javascript!.id,
   extension: javascript!.extensions[0]!
@@ -43,31 +52,22 @@ export type TabsSlice = {
 export const createTabsSlice: StateCreator<TabsSlice> = (set, get) => ({
   tabs: [initialData],
   activeDecor: null,
-  activeTabId: get()?.tabs[0]!.id,
+  activeTabId: "initialTab",
   getTab: () => {
-    const { tabs, activeTabId } = get()
-    let tab = tabs.find((tab) => tab.id === activeTabId)
-
-    // if tab not found (on first render activeTabId is undefined)
-    const isNotCorrectId = !activeTabId || activeTabId !== tab?.id
-    if (isNotCorrectId) {
-      const firstTab = tabs[0]!
-      tab = firstTab
-      set(() => ({ activeTabId: firstTab.id }))
-    }
-
-    return tab!
+    return get().tabs.find((tab) => tab.id === get().activeTabId)!
   },
   changeTab: (tabId) => {
     set(() => ({
       activeTabId: tabId
     }))
   },
-  addTab: () =>
+  addTab: () => {
+    const id = Date.now().toString()
     set((state) => ({
-      activeTabId: Date.now().toString(),
-      tabs: [...state.tabs, { ...initialData, id: Date.now().toString() }]
-    })),
+      activeTabId: id,
+      tabs: [...state.tabs, { ...initialData, id }]
+    }))
+  },
   removeTab: (tabId) => {
     const remainingTabs = get().tabs.filter((tab) => tab.id !== tabId)
     const newActiveTabId = remainingTabs[0]!.id

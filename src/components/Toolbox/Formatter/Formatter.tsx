@@ -7,19 +7,22 @@ import { toast } from "sonner"
 
 const Formatter = () => {
   const updateTab = useStore((state) => state.updateTab)
-  const getTab = useStore((state) => state.getTab())
+  const currentTab = useStore((state) => state.getTab())
+
+  const language = resolveLanguage(currentTab.languageId)
 
   const formatCode = async () => {
-    try {
-      const prettierBySelectedLanguage = resolveLanguage(getTab.languageId).prettier
+    if (!language?.prettier) return
 
-      const plugins = await awaitPlugins(prettierBySelectedLanguage?.plugin)
-      const formatted = await prettier.format(getTab.content, {
-        parser: prettierBySelectedLanguage?.parser,
-        plugins
+    try {
+      const plugins = await awaitPlugins(language.prettier.plugin)
+      const formatted = await prettier.format(currentTab.content, {
+        parser: language.prettier.parser,
+        plugins,
+        parentParser: language.prettier.parser
       })
 
-      updateTab(getTab.id, { content: formatted })
+      updateTab(currentTab.id, { content: formatted })
       toast.success("Code formatted successfully")
       // eslint-disable-next-line unused-imports/no-unused-vars
     } catch (error) {
@@ -28,7 +31,7 @@ const Formatter = () => {
   }
 
   return (
-    <Button onClick={formatCode} variant="outline">
+    <Button disabled={!language.prettier} onClick={formatCode} variant="outline">
       <LetterText /> <span>Format</span>
     </Button>
   )

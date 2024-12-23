@@ -221,7 +221,10 @@ export const languages: Language[] = [
     syntax: () => langs.json(),
     prettier: {
       parser: "json5",
-      plugin: () => import("prettier/parser-babel")
+      plugin: [
+        () => import("prettier/parser-babel"),
+        () => import("prettier/plugins/estree.js") as Promise<PrettierPlugin>
+      ]
     },
     extensions: [
       {
@@ -418,10 +421,10 @@ export const languages: Language[] = [
     id: "rust",
     name: "Rust",
     syntax: () => langs.rust(),
-    prettier: {
+    /* prettier: {
       parser: "jinx-rust",
       plugin: () => import("prettier-plugin-rust")
-    },
+    }, */
     extensions: [
       {
         key: "rs",
@@ -436,7 +439,7 @@ export const languages: Language[] = [
     syntax: () => langs.sql(),
     prettier: {
       parser: "sql",
-      plugin: () => import("prettier-plugin-sql") as Promise<PrettierPlugin>
+      plugin: () => import("prettier-plugin-sql").then((m) => m.default) as Promise<PrettierPlugin>
     },
     extensions: [
       {
@@ -452,7 +455,7 @@ export const languages: Language[] = [
     syntax: () => langs.toml(),
     prettier: {
       parser: "toml",
-      plugin: () => import("prettier-plugin-toml") as Promise<PrettierPlugin>
+      plugin: () => import("prettier-plugin-toml").then((m) => m.default) as Promise<PrettierPlugin>
     },
     extensions: [
       {
@@ -591,8 +594,8 @@ export const languages: Language[] = [
     name: "Solidity",
     syntax: () => langs.solidity(),
     prettier: {
-      parser: "solidity",
-      plugin: () => import("prettier-plugin-solidity")
+      parser: "solidity-parse",
+      plugin: () => import("prettier-plugin-solidity").then((m) => m.default) as Promise<PrettierPlugin>
     },
     extensions: [
       {
@@ -638,7 +641,3 @@ export const languageNames = languages.map((item) => {
     name: item.name
   }
 })
-
-export function getLanguage(id: string) {
-  return languages.find((lang) => lang.id === id)!
-}

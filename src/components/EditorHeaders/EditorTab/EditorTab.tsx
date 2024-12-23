@@ -52,6 +52,12 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
     removeTab(activeTabId)
   }
 
+  function handleChangeTab(id: string) {
+    if (isEditor) {
+      changeTab(id)
+    }
+  }
+
   const fileExtensions = languages.find((lang) => lang.id === tab.languageId)?.extensions
 
   const isActive = tab.id === activeTabId
@@ -61,7 +67,7 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
     <div
       data-testid="editor-tab"
       data-active={isActive}
-      onClick={() => changeTab(tab.id)}
+      onClick={() => handleChangeTab(tab.id)}
       className={cn(
         "relative flex items-center duration-200 justify-center gap-1.5 rounded-lg pl-4 pr-2 py-1",
         isActive ? "shadow-md shadow-black/10" : ""

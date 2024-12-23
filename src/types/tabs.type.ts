@@ -7,6 +7,6 @@ export type TabConfig = {
   name: string
   decorations: Record<DecorationType, number[]>
   content: string
-  languageId: string
+  languageId: Language["id"]
   extension: Language["extensions"][number]
 }
