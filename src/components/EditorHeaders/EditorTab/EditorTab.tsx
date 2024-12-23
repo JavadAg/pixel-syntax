@@ -4,14 +4,15 @@
 import type { TabConfig } from "@/types/tabs.type"
 import AutoResizingInput from "@/components/ui/AutoResizingInput"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown"
+import { resolveTheme } from "@/data/editor-themes"
 import { type Language, languages } from "@/data/language-configs"
 import useStore from "@/store/store"
-import { adjustBrightness, adjustOpacity, cn, resolveTheme } from "@/utils/helpers"
+import { adjustBrightness, adjustOpacity, cn } from "@/utils/helpers"
+import { tabNameSchema } from "@/validations/configs.validation"
 import { debounce } from "lodash-es"
 import { X } from "lucide-react"
 import { useCallback, useState } from "react"
 import { toast } from "sonner"
-import { z } from "zod"
 
 type IProps = {
   tab: TabConfig
@@ -35,7 +36,7 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
   )
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const isValid = z.string().min(1).max(20).safeParse(e.target.value)
+    const isValid = tabNameSchema.safeParse(e.target.value)
     if (isValid.success) {
       setName(e.target.value)
       handleNameCallback(tab.id, e.target.value)
@@ -63,6 +64,16 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
   const isActive = tab.id === activeTabId
   const theme = resolveTheme(themeId, isTransparent)
 
+  const tabNameBgStyle = {
+    backgroundColor: isTransparent
+      ? isActive
+        ? adjustOpacity(theme.options.settings.foreground!, 0.1)
+        : "transparent"
+      : isActive
+        ? adjustBrightness(theme.options.settings.background!, 0.3)
+        : "transparent"
+  }
+
   return (
     <div
       data-testid="editor-tab"
@@ -73,13 +84,7 @@ const EditorTab: React.FC<IProps> = ({ tab, isEditor }) => {
         isActive ? "shadow-md shadow-black/10" : ""
       )}
       style={{
-        backgroundColor: isTransparent
-          ? isActive
-            ? adjustOpacity(theme.options.settings.foreground!, 0.1)
-            : "transparent"
-          : isActive
-            ? adjustBrightness(theme.options.settings.background!, 0.3)
-            : "transparent"
+        ...tabNameBgStyle
       }}
     >
       {/* using img tag as next/image is not working with dom-to-image */}

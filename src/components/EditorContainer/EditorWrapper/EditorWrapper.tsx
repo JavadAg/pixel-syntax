@@ -1,8 +1,10 @@
 "use client"
 
 import type { EditorConfig } from "@/types/editor-config.type"
+import { resolveHeader } from "@/data/editor-headers"
+import { resolveTheme } from "@/data/editor-themes"
 import useStore from "@/store/store"
-import { cn, resolveHeader, resolveTheme } from "@/utils/helpers"
+import { cn } from "@/utils/helpers"
 import EditorTab from "../../EditorHeaders/EditorTab/EditorTab"
 import Watermark from "../Watermark/Watermark"
 import Editor from "./Editor/Editor"

@@ -7,13 +7,11 @@ import { radii } from "@/data/radius-presets"
 import { shadows } from "@/data/shadow-presets"
 import db from "@/libs/db"
 import useStore from "@/store/store"
+import { nameSchema } from "@/validations/configs.validation"
 import { useLiveQuery } from "dexie-react-hooks"
 import { debounce } from "lodash-es"
 import { useCallback, useState } from "react"
 import { toast } from "sonner"
-import { z } from "zod"
-
-const nameSchema = z.string().min(1).max(20)
 
 export const usePreset = () => {
   const [activePreset, setActivePreset] = useState<Preset | null>(null)

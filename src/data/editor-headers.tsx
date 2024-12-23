@@ -41,3 +41,7 @@ export const headers: EditorHeader[] = [
     )
   }
 ]
+
+export const resolveHeader = (id: EditorHeader["id"]): EditorHeader => {
+  return headers.find((header) => header.id === id)!
+}

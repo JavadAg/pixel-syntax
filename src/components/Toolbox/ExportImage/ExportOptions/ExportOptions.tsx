@@ -4,13 +4,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup"
 import { exportExtensions, exportScales } from "@/data/export-configs"
 import useStore from "@/store/store"
+import { nameSchema } from "@/validations/configs.validation"
 import { Settings2 } from "lucide-react"
 import { type ChangeEvent, Fragment } from "react"
 import { toast } from "sonner"
-import { z } from "zod"
 import ExportConfigWrapper from "./ExportOptionWrapper/ExportOptionWrapper"
-
-const nameSchema = z.string().min(1).max(20)
 
 const ExportOptions = () => {
   const { exportExtension, exportExtensionOptions, exportName, exportScale } = useStore((state) => state.exportConfig)

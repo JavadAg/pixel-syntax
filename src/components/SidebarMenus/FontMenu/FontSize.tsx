@@ -1,10 +1,8 @@
 import { Input } from "@/components/ui/Input"
 import useStore from "@/store/store"
+import { fontSizeSchema } from "@/validations/configs.validation"
 import { toast } from "sonner"
-import { z } from "zod"
 import SidebarItemWrapper from "../SidebarItemWrapper/SidebarItemWrapper"
-
-const fontSizeSchema = z.number().min(12).max(24)
 
 const FontSize = () => {
   const { fontSize } = useStore((state) => state.editorConfig)

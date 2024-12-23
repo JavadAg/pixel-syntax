@@ -1,9 +1,10 @@
 import type { EditorConfig } from "@/types/editor-config.type"
 import type { Preset } from "@/types/presets.type"
 import { headers } from "@/data/editor-headers"
+import { resolveTheme } from "@/data/editor-themes"
 import { languages } from "@/data/language-configs"
 import { usePreset } from "@/hooks/use-preset"
-import { cn, resolveTheme } from "@/utils/helpers"
+import { cn } from "@/utils/helpers"
 import createTheme from "@uiw/codemirror-themes"
 import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { useCallback } from "react"
@@ -49,6 +50,13 @@ const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
 
   const extensions = [languages.find((lang) => lang.id === "javascript")!.syntax(), fontFamily()]
 
+  const basicSetup = {
+    highlightActiveLine: false,
+    highlightActiveLineGutter: false,
+    lineNumbers: editorConfig.isLineNumber,
+    foldGutter: false
+  }
+
   return (
     <div
       data-testid="preset-card"
@@ -91,12 +99,7 @@ const PresetCard: React.FC<IProps> = ({ preset, onClick, isActive }) => {
             <CodeMirror
               readOnly
               editable={false}
-              basicSetup={{
-                highlightActiveLine: false,
-                highlightActiveLineGutter: false,
-                lineNumbers: editorConfig.isLineNumber,
-                foldGutter: false
-              }}
+              basicSetup={basicSetup}
               className="select-none bg-transparent"
               value={`let greeting = "Hello";`}
               theme={createTheme(theme.options)}

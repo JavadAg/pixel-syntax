@@ -1,5 +1,6 @@
+import { resolveTheme } from "@/data/editor-themes"
 import useStore from "@/store/store"
-import { cn, resolveTheme } from "@/utils/helpers"
+import { cn } from "@/utils/helpers"
 
 const Watermark = () => {
   const {

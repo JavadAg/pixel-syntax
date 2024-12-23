@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover
 import { type Border, borders } from "@/data/border-presets"
 import useStore from "@/store/store"
 import { cn } from "@/utils/helpers"
-import { borderSchema } from "@/validations/editor-config.validation"
+import { borderSchema } from "@/validations/configs.validation"
 import { Check, ChevronDown } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"

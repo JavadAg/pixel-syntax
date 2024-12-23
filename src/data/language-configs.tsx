@@ -206,7 +206,6 @@ export const languages: Language[] = [
     id: "python",
     name: "Python",
     syntax: () => langs.python(),
-
     extensions: [
       {
         key: "py",
@@ -641,3 +640,7 @@ export const languageNames = languages.map((item) => {
     name: item.name
   }
 })
+
+export const resolveLanguage = (id: Language["id"]) => {
+  return languages.find((lang) => lang.id === id)!
+}

@@ -102,3 +102,27 @@ export const paddingSchema = z.number().min(0).max(256)
 */
 
 export const radiusSchema = z.number().min(0).max(36)
+
+/**
+|--------------------------------------------------
+| Tab Name Schema
+|--------------------------------------------------
+*/
+
+export const tabNameSchema = z.string().min(1).max(40)
+
+/**
+|--------------------------------------------------
+| Font Size Schema
+|--------------------------------------------------
+*/
+
+export const fontSizeSchema = z.number().min(12).max(24)
+
+/**
+|--------------------------------------------------
+|  Name Schema
+|--------------------------------------------------
+*/
+
+export const nameSchema = z.string().min(1).max(20)

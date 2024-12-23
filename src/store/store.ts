@@ -22,6 +22,9 @@ const useStore = create<EditorConfigSlice & EditorSlice & ExportSlice & TabsSlic
         }
         return { ...currentState, ...persistedState }
       },
+      migrate: () => {
+        return {}
+      },
       partialize: (state) => ({
         tabs: state.tabs,
         editorConfig: state.editorConfig

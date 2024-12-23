@@ -447,6 +447,16 @@ export const themeNames = themes
   })
   .sort((a, b) => a.name.localeCompare(b.name))
 
-export function getTheme(id: string) {
-  return themes.find((theme) => theme.id === id)!
+export const resolveTheme = (id: string, isTransparent: boolean): Theme => {
+  const theme = themes.find((theme) => theme.id === id)!
+
+  return isTransparent
+    ? {
+        ...theme,
+        options: {
+          ...theme.options,
+          settings: { ...theme.options.settings, gutterBackground: "transparent", background: "transparent" }
+        }
+      }
+    : theme
 }

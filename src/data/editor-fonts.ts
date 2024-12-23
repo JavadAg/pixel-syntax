@@ -148,6 +148,6 @@ export const fontNames = fonts
   })
   .sort((a, b) => a.name.localeCompare(b.name))
 
-export function getFont(id: string) {
+export const resolveFont = (id: Font["id"]): Font => {
   return fonts.find((font) => font.id === id)!
 }

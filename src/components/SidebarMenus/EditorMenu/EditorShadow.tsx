@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover
 import { type Shadow, shadows } from "@/data/shadow-presets"
 import useStore from "@/store/store"
 import { cn } from "@/utils/helpers"
-import { shadowSchema } from "@/validations/editor-config.validation"
+import { shadowSchema } from "@/validations/configs.validation"
 import { Check, ChevronDown } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"

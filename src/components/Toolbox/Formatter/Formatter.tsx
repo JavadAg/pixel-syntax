@@ -1,6 +1,7 @@
 import Button from "@/components/ui/Button"
+import { resolveLanguage } from "@/data/language-configs"
 import useStore from "@/store/store"
-import { awaitPlugins, resolveLanguage } from "@/utils/helpers"
+import { awaitPlugins } from "@/utils/helpers"
 import { LetterText } from "lucide-react"
 import prettier from "prettier"
 import { toast } from "sonner"

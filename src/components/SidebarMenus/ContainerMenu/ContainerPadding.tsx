@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover
 import { type Padding, paddings } from "@/data/padding-presets"
 import useStore from "@/store/store"
 import { cn } from "@/utils/helpers"
-import { paddingSchema } from "@/validations/editor-config.validation"
+import { paddingSchema } from "@/validations/configs.validation"
 import { Check, ChevronDown } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
