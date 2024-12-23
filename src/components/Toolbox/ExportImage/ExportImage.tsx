@@ -28,10 +28,15 @@ const ExportImage = () => {
     }
 
     if (editorContainerRef) {
+      const width = editorContainerRef.offsetWidth
+      const height = editorContainerRef.offsetHeight
+
       try {
         const dataUrl = await domtoimage[value](editorContainerRef, {
           copyDefaultStyles: false,
           scale: exportScale.value,
+          height,
+          width,
           filter,
           ...exportOptions
         })
