@@ -1,0 +1,9 @@
+node_modules
+dist
+.next
+out
+tests
+coverage
+.vscode
+.husky
+.env.local
